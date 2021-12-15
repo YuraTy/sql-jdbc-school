@@ -6,13 +6,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class WorkDatabase {
-    public static void main(String[] args) throws ClassNotFoundException, SQLException, IOException {
+    public static void main(String[] args){
         Dao dao = new Dao();
-        dao.connecting();
-        dao.createDatabase();
-        dao.createTableCourses();
-        dao.createTableStudents();
-        dao.createTableGroups();
-        dao.visual();
+
     }
 }
