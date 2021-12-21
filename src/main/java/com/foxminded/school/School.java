@@ -12,7 +12,7 @@ public class School {
         DataSource dataSource = new DataSource();
         dataSource.getConnection();
         RandomData randomData = new RandomData();
-        System.out.println(randomData.randomGroups());
+        System.out.println(randomData.randomStudent());
 
     }
 }
