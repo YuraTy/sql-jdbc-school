@@ -1,6 +1,6 @@
 CREATE TABLE students(
-studentId int AUTO_INCREMENT,
-groupId int,
-firstName text,
-lastName text);
+Studentid int NOT NULL AUTO_INCREMENT,
+GroupId int,
+FirstName text,
+LastName text);
 

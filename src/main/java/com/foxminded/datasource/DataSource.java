@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class DataSource {
-    
-    private String properties = "config.properties";
 
     private static final String driverSQL = "org.postgresql.Driver";
 
@@ -22,14 +20,8 @@ public class DataSource {
         }
     }
 
-    public DataSource(String properties) {
-        this.properties = properties;
-    }
-    
-    public DataSource(){}
-
     public Connection getConnection () throws IOException, SQLException {
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(properties)){
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("config.properties")){
             Properties properties = new Properties();
             properties.load(inputStream);
             String host = properties.getProperty("db.host");
