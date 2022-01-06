@@ -19,9 +19,9 @@ public class StudentDaoImpl implements StudentDao {
     public void create(Student student) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO students SET firstName=? , lastName=? , groupId=? ")) {
-            preparedStatement.setString(1,student.getFirstName());
-            preparedStatement.setString(2,student.getLastName());
-            preparedStatement.setInt(3,student.getGroupId());
+            preparedStatement.setString(1, student.getFirstName());
+            preparedStatement.setString(2, student.getLastName());
+            preparedStatement.setInt(3, student.getGroupId());
             preparedStatement.execute();
             System.out.println("Data recorded");
         } catch (SQLException | IOException e) {
@@ -34,7 +34,7 @@ public class StudentDaoImpl implements StudentDao {
         List<Student> studentsList = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT studentId , groupId , firstName , lastName FROM students");
-             ResultSet resultSet = preparedStatement.executeQuery()){
+             ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
                 Student student = new Student();
                 student.setStudentId(resultSet.getInt("studentId"));
@@ -55,15 +55,15 @@ public class StudentDaoImpl implements StudentDao {
     public Student findId(int studentId) {
         Student student = new Student();
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement findById = connection.prepareStatement("SELECT groupId , firstName , lastName FROM students WHERE studentId=?")){
-            findById.setInt(1,studentId); // for some reason gives an error "org.h2.jdbc.JdbcSQLSyntaxErrorException: Столбец "studentId" не найден"
+             PreparedStatement findById = connection.prepareStatement("SELECT groupId , firstName , lastName FROM students WHERE studentId=?")) {
+            findById.setInt(1, studentId); // for some reason gives an error "org.h2.jdbc.JdbcSQLSyntaxErrorException: Столбец "studentId" не найден"
             ResultSet resultSet = findById.executeQuery();
-            while (resultSet.next()) {
-                student.setStudentId(resultSet.getInt("studentId"));
-                student.setGroupId(resultSet.getInt("groupId"));
-                student.setFirstName(resultSet.getString("firstName"));
-                student.setFirstName(resultSet.getString("lastName"));
-            }
+            resultSet.next();
+            student.setGroupId(resultSet.getInt("groupId"));
+            student.setFirstName(resultSet.getString("firstName"));
+            student.setFirstName(resultSet.getString("lastName"));
+            student.setStudentId(resultSet.getInt("studentId"));
+
             return student;
         } catch (SQLException | IOException e) {
             System.err.println("Failed to read data from database");
@@ -73,9 +73,9 @@ public class StudentDaoImpl implements StudentDao {
     }
 
     @Override
-    public void update(Student student , int studentId) {
+    public void update(Student student, int studentId) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement updateById = connection.prepareStatement("UPDATE students SET groupId = ? , firstName = ? , lastName = ? WHERE studentId = ?")){
+             PreparedStatement updateById = connection.prepareStatement("UPDATE students SET groupId = ? , firstName = ? , lastName = ? WHERE studentId = ?")) {
             updateById.setInt(1, student.getGroupId());
             updateById.setString(2, student.getFirstName());
             updateById.setString(3, student.getLastName());
@@ -89,8 +89,8 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public void delete(int studentId) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM students WHERE studentId =? " )){
-            preparedStatement.setInt(1,studentId);
+             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM students WHERE studentId = ? ")) {
+            preparedStatement.setInt(1, studentId);
             preparedStatement.execute();
         } catch (SQLException | IOException e) {
             e.printStackTrace();
