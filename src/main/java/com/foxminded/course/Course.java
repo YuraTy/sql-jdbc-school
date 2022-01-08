@@ -1,12 +1,16 @@
 package com.foxminded.course;
 
-import com.foxminded.student.Student;
-
 public class Course {
 
     private int courseId;
     private String courseName;
     private String courseDescription;
+
+    public Course(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public Course(){}
 
     public int getCourseId() {
         return courseId;

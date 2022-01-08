@@ -9,13 +9,12 @@ import java.util.Properties;
 
 public class DataSource {
 
-    private static final String driverSQL = "org.postgresql.Driver";
-
-
     static {
-        try {
-            Class.forName(driverSQL);
-        } catch (ClassNotFoundException e) {
+        try(InputStream inputStream = DataSource.class.getClassLoader().getResourceAsStream("config.properties")) {
+            Properties properties = new Properties();
+            properties.load(inputStream);
+            Class.forName(properties.getProperty("db.driver"));
+        } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
     }

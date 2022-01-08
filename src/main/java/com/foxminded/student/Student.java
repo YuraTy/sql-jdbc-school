@@ -12,18 +12,6 @@ public class Student {
         return super.hashCode();
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (!(obj instanceof Student))
-            return false;
-        Student student = (Student) obj;
-        return  this.firstName.equals(student.firstName) && this.lastName.equals(student.lastName) && this.studentId==student.studentId && this.groupId==student.groupId;
-    }
-
     public String getFirstName() {
         return firstName;
     }
@@ -54,5 +42,16 @@ public class Student {
 
     public void setStudentId(int studentId) {
         this.studentId = studentId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        if (firstName.equals(student.firstName) && lastName.equals(student.lastName) && groupId == (student.groupId)) {
+            return true;
+        }
+        return false;
     }
 }

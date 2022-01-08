@@ -55,10 +55,11 @@ public class CourseDaoImpl implements CourseDao {
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT courseId , courseName , courseDescription FROM courses WHERE courseId=?")) {
             preparedStatement.setInt(1, courseId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            course.setCourseId(resultSet.getInt("courseId"));
-            course.setCourseName(resultSet.getString("courseName"));
-            course.setCourseDescription(resultSet.getString("courseDescription"));
+            if(resultSet.next()) {
+                course.setCourseId(resultSet.getInt("courseId"));
+                course.setCourseName(resultSet.getString("courseName"));
+                course.setCourseDescription(resultSet.getString("courseDescription"));
+            }
             return course;
         } catch (SQLException | IOException e) {
             System.err.println("Failed to read data from database");

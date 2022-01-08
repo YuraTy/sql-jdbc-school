@@ -1,7 +1,5 @@
 package com.foxminded.groups;
 
-import com.foxminded.student.Student;
-
 public class Group {
 
     private int groupId;

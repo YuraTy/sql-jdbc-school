@@ -53,9 +53,10 @@ public class GroupDaoImpl implements GroupDao {
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT groupId , groupName FROM groups WHERE groupId=?");) {
             preparedStatement.setInt(1, groupId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            group.setGroupId(resultSet.getInt("groupId"));
-            group.setGroupName(resultSet.getString("groupName"));
+            if(resultSet.next()) {
+                group.setGroupId(resultSet.getInt("groupId"));
+                group.setGroupName(resultSet.getString("groupName"));
+            }
             return group;
         } catch (SQLException | IOException e) {
             System.err.println("Failed to read data from database");

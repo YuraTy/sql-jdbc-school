@@ -58,12 +58,12 @@ public class StudentDaoImpl implements StudentDao {
              PreparedStatement findById = connection.prepareStatement("SELECT groupId , firstName , lastName FROM students WHERE studentId=?")) {
             findById.setInt(1, studentId); // for some reason gives an error "org.h2.jdbc.JdbcSQLSyntaxErrorException: Столбец "studentId" не найден"
             ResultSet resultSet = findById.executeQuery();
-            resultSet.next();
-            student.setGroupId(resultSet.getInt("groupId"));
-            student.setFirstName(resultSet.getString("firstName"));
-            student.setFirstName(resultSet.getString("lastName"));
-            student.setStudentId(resultSet.getInt("studentId"));
-
+            if(resultSet.next()) {
+                student.setGroupId(resultSet.getInt("groupId"));
+                student.setFirstName(resultSet.getString("firstName"));
+                student.setFirstName(resultSet.getString("lastName"));
+                student.setStudentId(resultSet.getInt("studentId"));
+            }
             return student;
         } catch (SQLException | IOException e) {
             System.err.println("Failed to read data from database");

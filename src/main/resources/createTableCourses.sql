@@ -1,4 +1,5 @@
 CREATE TABLE  courses( 
-course_id int
-course_name text
-course_description text);
+CourseId int,
+CourseName text,
+CourseDescription text,
+PRIMARY KEY (CourseId));
