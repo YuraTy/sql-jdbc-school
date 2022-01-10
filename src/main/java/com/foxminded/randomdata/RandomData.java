@@ -7,6 +7,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class RandomData {
 
@@ -20,26 +21,20 @@ public class RandomData {
     }
 
     public List<Group> randomGroups() {
-        List<Group> groupList = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            Group group = new Group();
-            group.setGroupName(randomGroup());
-            groupList.add(group);
-        }
-        return groupList;
+        return Stream.generate(Group::new)
+                .peek(p -> p.setGroupName(randomGroup()))
+                .limit(20)
+                .collect(Collectors.toList());
     }
 
     public List<Student> randomStudent() {
         String[] nameStudent = {"Vitaly", "Umar", "Renat", "Imran", "Artyom", "Salim", "Islam", "Yaroslav", "Ethan", "Peter", "Eva", "Eileen", "Tina", "Lera", "Anastasia", "Zoya", "Damira", "Yana", "Evelina", "Victoria"};
         String[] surnameStudent = {"Akimenko", "Aleksandrenko", "Alekseenko", "Andrievskiy", "Andriyashev", "Ardashev", "Artemenko", "Babarika", "Babich", "Vasilevskiy", "Vasilyuk", "Gavrilyuk", "Daragan", "Derevyanko", "Dzyuba", "Efimenko", "Zheleznyak", "Ischenko", "Kalenichenko", "Karpenko"};
-        List<Student> studentsList = new ArrayList<>();
-        for (int i = 0; i < 200; i++) {
-            Student student = new Student();
-            student.setLastName(surnameStudent[randomNumber(0, 20)]);
-            student.setFirstName(nameStudent[randomNumber(0, 20)]);
-            studentsList.add(student);
-        }
-        return studentsList;
+        return Stream.generate(Student::new)
+                .peek(p -> p.setLastName(surnameStudent[randomNumber(0,20)]))
+                .peek(p-> p.setFirstName(nameStudent[randomNumber(0, 20)]))
+                .limit(200)
+                .collect(Collectors.toList());
     }
 
     public int randomNumber(int start, int finale) {

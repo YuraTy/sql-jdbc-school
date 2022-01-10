@@ -1,6 +1,5 @@
 package com.foxminded.dao.groupsdao;
 
-import com.foxminded.dao.coursesdao.CourseDaoImpl;
 import com.foxminded.datasource.DataSource;
 import com.foxminded.groups.Group;
 import org.h2.tools.RunScript;
