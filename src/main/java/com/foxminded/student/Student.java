@@ -49,7 +49,7 @@ public class Student {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
-        if (firstName.equals(student.firstName) && lastName.equals(student.lastName) && groupId == (student.groupId)) {
+        if (firstName.equals(student.firstName) && lastName.equals(student.lastName)){
             return true;
         }
         return false;

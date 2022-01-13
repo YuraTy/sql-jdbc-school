@@ -6,12 +6,6 @@ public class Course {
     private String courseName;
     private String courseDescription;
 
-    public Course(String courseName) {
-        this.courseName = courseName;
-    }
-
-    public Course(){}
-
     public int getCourseId() {
         return courseId;
     }
@@ -45,6 +39,6 @@ public class Course {
         if (!(obj instanceof Course))
             return false;
         Course course = (Course) obj;
-        return this.courseName.equals(course.courseName) && this.courseDescription.equals(course.courseDescription);
+        return this.courseName.equals(course.courseName) ;
     }
 }

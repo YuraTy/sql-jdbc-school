@@ -1,5 +1,6 @@
 package com.foxminded.dao.studentdao;
 
+import com.foxminded.course.Course;
 import com.foxminded.datasource.DataSource;
 import com.foxminded.student.Student;
 
@@ -91,6 +92,17 @@ public class StudentDaoImpl implements StudentDao {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM students WHERE studentId = ? ")) {
             preparedStatement.setInt(1, studentId);
+            preparedStatement.execute();
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void createTableCourses(Student student, Course course) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO studentsCourses VALUES(?,?)")) {
+            preparedStatement.setInt(1, student.getStudentId());
+            preparedStatement.setInt(2, course.getCourseId());
             preparedStatement.execute();
         } catch (SQLException | IOException e) {
             e.printStackTrace();

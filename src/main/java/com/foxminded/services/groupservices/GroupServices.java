@@ -8,8 +8,8 @@ import java.util.List;
 
 public class GroupServices {
 
-    private final RandomData randomData = new RandomData();
-    private final GroupDaoImpl groupDao = new GroupDaoImpl();
+    private final RandomData randomData = new RandomData() ;
+    private  GroupDaoImpl groupDao = new GroupDaoImpl() ;
 
     public void fillingGroupsDB() {
         List<Group> groupList = randomData.randomGroups();

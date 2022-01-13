@@ -12,22 +12,27 @@ import java.util.Map;
 
 public class StudentServices {
 
-    private final StudentDaoImpl studentDao = new StudentDaoImpl();
-    private final GroupDaoImpl groupDao = new GroupDaoImpl();
-    private final RandomData randomData = new RandomData();
+    private  StudentDaoImpl studentDao ;
+    private final GroupDaoImpl groupDao = new GroupDaoImpl() ;
+    private final RandomData randomData = new RandomData() ;
     private static final Map<Group, Integer> sizeCount = new HashMap<>();
-    private final List<Group> groupList = groupDao.findAll();
-    private final int randomNumber = randomData.randomNumber(0, 19);
+    private final int randomNumber = (int) (Math.random() * 19);
+
 
     public void fillingStudentsDB() {
         List<Student> studentList = randomData.randomStudent();
+        List<Group> groupList = groupDao.findAll();
         studentList.stream()
                 .peek(p -> p.setGroupId(checkGroup(groupList.get(randomNumber)).getGroupId()))
                 .forEach(studentDao::create);
     }
 
     private Group checkGroup(Group group) {
-        if (sizeCount.get(group) >= 10 && sizeCount.get(group) <= 30) {
+        List<Group> groupList = groupDao.findAll();
+        if (!sizeCount.containsKey(group)){
+            sizeCount.put(group,1);
+            return group;
+        }else if(sizeCount.get(group) >= 10 && sizeCount.get(group) <= 30) {
             sizeCount.put(group, sizeCount.get(group) + 1);
             return group;
         } else return groupList.get(randomNumber);

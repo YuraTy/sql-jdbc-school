@@ -13,7 +13,13 @@ public class RandomData {
 
     public List<Course> randomCourses () {
         List<String> coursesLis = Arrays.asList("mathematics", "rhetoric", "drawing", "drafting", "astronomy", "ecology", "philosophy", "jurisprudence", "economics", "natural science", "chemistry", "physics", "geometry", "algebra", "informatics", "biology", "history", "geography", "technology", "foreign language");
-        return coursesLis.stream().map(Course::new).collect(Collectors.toList());
+        List<Course> list = new ArrayList<>();
+        for (String s:coursesLis){
+            Course course = new Course();
+            course.setCourseName(s);
+            list.add(course);
+        }
+        return list;
     }
 
     private String randomGroup() {
