@@ -29,7 +29,10 @@ public class CourseServices {
 
     private Student checkStudent(Student student) {
         List<Student> studentList = studentDao.findAll();
-        if (courseSize.get(student) >= 1 && courseSize.get(student) <= 3) {
+        if (!courseSize.containsKey(student)){
+            courseSize.put(student,1);
+            return student;
+        } else if (courseSize.get(student) >= 1 && courseSize.get(student) <= 3) {
             courseSize.put(student, courseSize.get(student) + 1);
             return student;
         } else return studentList.get(randomNumber);
