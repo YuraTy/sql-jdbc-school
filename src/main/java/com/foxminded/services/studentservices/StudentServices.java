@@ -1,5 +1,6 @@
 package com.foxminded.services.studentservices;
 
+import com.foxminded.course.Course;
 import com.foxminded.dao.groupsdao.GroupDaoImpl;
 import com.foxminded.dao.studentdao.StudentDaoImpl;
 import com.foxminded.groups.Group;
@@ -12,7 +13,7 @@ import java.util.Map;
 
 public class StudentServices {
 
-    private  StudentDaoImpl studentDao ;
+    private  StudentDaoImpl studentDao = new StudentDaoImpl() ;
     private final GroupDaoImpl groupDao = new GroupDaoImpl() ;
     private final RandomData randomData = new RandomData() ;
     private static final Map<Group, Integer> sizeCount = new HashMap<>();
@@ -37,4 +38,19 @@ public class StudentServices {
             return group;
         } else return groupList.get(randomNumber);
     }
+
+    public void newStudent (Student student) {
+        studentDao.create(student);
+    }
+
+    public void deleteStudent (int idStudent){
+        studentDao.delete(idStudent);
+    }
+
+    public void addStudentOnCourse (Student student , Course course){
+        studentDao.createTableCourses(student,course);
+    }
+
+
+
 }

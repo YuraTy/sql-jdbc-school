@@ -42,21 +42,10 @@ public class OperationsSQL {
         return groupList;
     }
 
-    public void newStudent (Student student) {
-        studentDao.create(student);
-    }
-
-    public void deleteStudent (int idStudent){
-         studentDao.delete(idStudent);
-    }
-
-    public void addStudentOnCourse (Student student , Course course){
-        studentDao.createTableCourses(student,course);
-    }
 
     public void deleteStudentFromCourse (Student student , Course course){
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM studentsCourses WHERE (studentId = ?, courseId = ?) ")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM studentsCourses WHERE (studentId = ?, courseId = ?)")) {
             preparedStatement.setInt(1, student.getStudentId());
             preparedStatement.setInt(2, course.getCourseId());
             preparedStatement.execute();
