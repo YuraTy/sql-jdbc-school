@@ -12,21 +12,25 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+class StudentDaoImplTest {
 
-public class StudentDaoImplTest {
-
-    private DataSource dataSource = new DataSource();
-    private StudentDaoImpl studentDao = new StudentDaoImpl();
+    private final DataSource dataSource = new DataSource();
+    private final StudentDaoImpl studentDao = new StudentDaoImpl();
 
     @BeforeEach
     private void createTable() throws SQLException, IOException {
         RunScript.execute(dataSource.getConnection(), new FileReader("src/test/resources/createTableStudents.sql"));
+        RunScript.execute(dataSource.getConnection(), new FileReader("src/test/resources/createTableCourses.sql"));
+        RunScript.execute(dataSource.getConnection(), new FileReader("src/test/resources/createTableStudentsCourses.sql"));
     }
 
     @AfterEach
     private void delTable() throws SQLException, IOException {
-    Statement statement = dataSource.getConnection().createStatement();
+        Statement statement = dataSource.getConnection().createStatement();
+        statement.execute("DROP TABLE studentsCourses;");
         statement.execute("DROP TABLE students;");
+        statement.execute("DROP TABLE courses;");
+
     }
 
     @Test
@@ -83,7 +87,6 @@ public class StudentDaoImplTest {
         expectedStudent.setStudentId(1);
         expectedStudent.setFirstName("Vitaly");
         expectedStudent.setLastName("Akimenko");
-        expectedStudent.setGroupId(2);
         return expectedStudent;
     }
     private Student testStudent2 () {
@@ -91,7 +94,6 @@ public class StudentDaoImplTest {
         expectedStudent.setStudentId(2);
         expectedStudent.setFirstName("Umar");
         expectedStudent.setLastName("Aleksandrenko");
-        expectedStudent.setGroupId(45);
         return expectedStudent;
     }
 }

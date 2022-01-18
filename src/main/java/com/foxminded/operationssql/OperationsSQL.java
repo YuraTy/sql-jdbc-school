@@ -22,37 +22,10 @@ public class OperationsSQL {
     private final DataSource dataSource = new DataSource();
     private final StudentDaoImpl studentDao = new StudentDaoImpl();
 
-    public List<Group> findGroups (int numberStudent){
-        List<Group> groupList = new ArrayList<>();
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT groupId , groupName  FROM groups , students WHERE students.idGroup COUNT <= ? ")) {
-            preparedStatement.setInt(1, numberStudent);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Group group = new Group();
-                group.setGroupId(resultSet.getInt("groupId"));
-                group.setGroupName(resultSet.getString("groupName"));
-                groupList.add(group);
-            }
-            return groupList;
-        } catch (SQLException | IOException e) {
-            System.err.println("Failed to read data from database");
-            e.printStackTrace();
-        }
-        return groupList;
-    }
 
 
-    public void deleteStudentFromCourse (Student student , Course course){
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM studentsCourses WHERE (studentId = ?, courseId = ?)")) {
-            preparedStatement.setInt(1, student.getStudentId());
-            preparedStatement.setInt(2, course.getCourseId());
-            preparedStatement.execute();
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
-        }
-    }
+
+
 
     public List<Student> findStudent (String namedCourse) {
         List<Course> courseList = new CourseDaoImpl().findAll();

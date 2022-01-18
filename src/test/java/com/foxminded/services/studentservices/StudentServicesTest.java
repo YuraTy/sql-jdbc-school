@@ -68,8 +68,14 @@ class StudentServicesTest {
 
     @Test
     void addStudentOnCourse() {
-        studentServices.addStudentOnCourse(testStudent1(),testCourse1());
+        studentServices.addStudentForCourse(testStudent1(),testCourse1());
         Mockito.verify(studentDao).createTableCourses(Mockito.any(),Mockito.any());
+    }
+
+    @Test
+    void deleteCourseForStudent() {
+        studentServices.deleteCourseForStudent(testStudent1(),testCourse1());
+        Mockito.verify(studentDao).deleteStudentFromCourse(Mockito.any(),Mockito.any());
     }
 
     private Student testStudent1 () {

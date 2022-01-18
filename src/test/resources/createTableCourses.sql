@@ -1,4 +1,5 @@
 CREATE TABLE  courses (
-CourseId int AUTO_INCREMENT,
+CourseId SERIAL PRIMARY KEY,
 CourseName text,
 CourseDescription text);
+

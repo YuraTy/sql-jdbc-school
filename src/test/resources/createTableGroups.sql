@@ -1,4 +1,4 @@
 CREATE TABLE groups (
-GroupId int AUTO_INCREMENT,
+GroupId SERIAL PRIMARY KEY,
 GroupName text);
 

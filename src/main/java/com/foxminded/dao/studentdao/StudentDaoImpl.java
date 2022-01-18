@@ -108,4 +108,15 @@ public class StudentDaoImpl implements StudentDao {
             e.printStackTrace();
         }
     }
+
+    public void deleteStudentFromCourse (Student student , Course course){
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM studentsCourses WHERE (studentId = ?, courseId = ?)")) {
+            preparedStatement.setInt(1, student.getStudentId());
+            preparedStatement.setInt(2, course.getCourseId());
+            preparedStatement.execute();
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

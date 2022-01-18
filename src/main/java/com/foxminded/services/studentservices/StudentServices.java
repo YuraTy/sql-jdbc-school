@@ -47,10 +47,11 @@ public class StudentServices {
         studentDao.delete(idStudent);
     }
 
-    public void addStudentOnCourse (Student student , Course course){
+    public void addStudentForCourse (Student student , Course course){
         studentDao.createTableCourses(student,course);
     }
 
-
-
+    public void deleteCourseForStudent (Student student , Course course){
+        studentDao.deleteStudentFromCourse(student,course);
+    }
 }

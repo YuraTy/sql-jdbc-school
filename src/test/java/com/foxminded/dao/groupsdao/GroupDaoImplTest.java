@@ -1,7 +1,9 @@
 package com.foxminded.dao.groupsdao;
 
+import com.foxminded.dao.studentdao.StudentDaoImpl;
 import com.foxminded.datasource.DataSource;
 import com.foxminded.groups.Group;
+import com.foxminded.student.Student;
 import org.h2.tools.RunScript;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -17,18 +19,21 @@ import java.util.List;
 
 class GroupDaoImplTest {
 
-    private DataSource dataSource = new DataSource();
-    private GroupDaoImpl groupDao  = new GroupDaoImpl();
+    private final DataSource dataSource = new DataSource();
+    private final GroupDaoImpl groupDao  = new GroupDaoImpl();
+    private final StudentDaoImpl studentDao = new StudentDaoImpl();
 
     @BeforeEach
     private void createTable() throws SQLException, IOException {
         RunScript.execute(dataSource.getConnection(), new FileReader("src/test/resources/createTableGroups.sql"));
+        RunScript.execute(dataSource.getConnection(), new FileReader("src/test/resources/createTableStudents.sql"));
     }
 
     @AfterEach
     private void delTable() throws SQLException, IOException {
         Statement statement = dataSource.getConnection().createStatement();
         statement.execute("DROP TABLE groups;");
+        statement.execute("DROP TABLE students;");
     }
 
     @Test
@@ -80,17 +85,52 @@ class GroupDaoImplTest {
         Assertions.assertEquals(expectedList,actualList);
     }
 
+    @Test
+    void findGroups() {
+    studentDao.create(testStudent1());
+    studentDao.create(testStudent2());
+    studentDao.create(testStudent3());
+    groupDao.create(testGroup1());
+    groupDao.create(testGroup2());
+    List<Group> actualList = groupDao.findGroups(1);
+    List<Group> expectedList = new ArrayList<>();
+    expectedList.add(testGroup1());
+    Assertions.assertEquals(expectedList,actualList);
+    }
+
     private Group testGroup1 (){
         Group group = new Group();
-        group.setGroupId(1);
         group.setGroupName("NG-22");
         return group;
     }
 
     private Group testGroup2 (){
         Group group = new Group();
-        group.setGroupId(2);
         group.setGroupName("DC-63");
         return group;
+    }
+
+    private Student testStudent1() {
+        Student student = new Student();
+        student.setLastName("Ivan");
+        student.setLastName("Pavlovich");
+        student.setGroupId(1);
+        return student;
+    }
+
+    private Student testStudent2() {
+        Student student = new Student();
+        student.setLastName("Nikolay");
+        student.setLastName("Bobrov");
+        student.setGroupId(2);
+        return student;
+    }
+
+    private Student testStudent3() {
+        Student student = new Student();
+        student.setLastName("Vova");
+        student.setLastName("Dudkin");
+        student.setGroupId(2);
+        return student;
     }
 }

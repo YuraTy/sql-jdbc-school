@@ -88,4 +88,28 @@ public class GroupDaoImpl implements GroupDao {
             e.printStackTrace();
         }
     }
+
+    public List<Group> findGroups (int numberStudent){
+        List<Group> groupList = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT groups.groupId , groups.groupName ,COUNT(students.groupId)\n" +
+                     "FROM groups groups\n" +
+                     "LEFT JOIN students students ON groups.groupId = students.groupId\n" +
+                     "GROUP BY groups.groupId , groups.groupName\n" +
+                     "HAVING COUNT(students.groupId)<=?")) {
+            preparedStatement.setInt(1, numberStudent);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Group group = new Group();
+                group.setGroupId(resultSet.getInt("groupId"));
+                group.setGroupName(resultSet.getString("groupName"));
+                groupList.add(group);
+            }
+            return groupList;
+        } catch (SQLException | IOException e) {
+            System.err.println("Failed to read data from database");
+            e.printStackTrace();
+        }
+        return groupList;
+    }
 }
