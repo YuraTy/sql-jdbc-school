@@ -37,20 +37,24 @@ class StudentServicesTest {
     private void createTable() throws SQLException, IOException {
         RunScript.execute(dataSource.getConnection(), new FileReader("src/test/resources/createTableGroups.sql"));
         RunScript.execute(dataSource.getConnection(), new FileReader("src/test/resources/createTableStudents.sql"));
+        RunScript.execute(dataSource.getConnection(), new FileReader("src/test/resources/createTableCourses.sql"));
+        RunScript.execute(dataSource.getConnection(), new FileReader("src/test/resources/createTableStudentsCourses.sql"));
     }
 
     @AfterEach
     private void delTable() throws SQLException, IOException {
         Statement statement = dataSource.getConnection().createStatement();
+        statement.execute("DROP TABLE studentsCourses;");
         statement.execute("DROP TABLE students;");
         statement.execute("DROP TABLE groups;");
+        statement.execute("DROP TABLE courses;");
     }
 
     @Test
     void fillingStudentsDB() {
         groupServices.fillingGroupsDB();
         studentServices.fillingStudentsDB();
-        Mockito.verify(studentDao,Mockito.times(200)).create(Mockito.any());
+        Mockito.verify(studentDao, Mockito.times(200)).create(Mockito.any());
     }
 
     @Test
@@ -68,17 +72,23 @@ class StudentServicesTest {
 
     @Test
     void addStudentOnCourse() {
-        studentServices.addStudentForCourse(testStudent1(),testCourse1());
-        Mockito.verify(studentDao).createTableCourses(Mockito.any(),Mockito.any());
+        studentServices.addStudentForCourse(testStudent1(), testCourse1());
+        Mockito.verify(studentDao).createTableCourses(Mockito.any(), Mockito.any());
     }
 
     @Test
     void deleteCourseForStudent() {
-        studentServices.deleteCourseForStudent(testStudent1(),testCourse1());
-        Mockito.verify(studentDao).deleteStudentFromCourse(Mockito.any(),Mockito.any());
+        studentServices.deleteCourseForStudent(testStudent1(), testCourse1());
+        Mockito.verify(studentDao).deleteStudentFromCourse(Mockito.any(), Mockito.any());
     }
 
-    private Student testStudent1 () {
+    @Test
+    void findStudent() {
+        studentServices.findStudent("mathematics");
+        Mockito.verify(studentDao).findStudent(Mockito.anyString());
+    }
+
+    private Student testStudent1() {
         Student expectedStudent = new Student();
         expectedStudent.setStudentId(1);
         expectedStudent.setFirstName("Vitaly");
@@ -86,7 +96,7 @@ class StudentServicesTest {
         return expectedStudent;
     }
 
-    private Course testCourse1 (){
+    private Course testCourse1() {
         Course course = new Course();
         course.setCourseId(1);
         course.setCourseName("mathematics");

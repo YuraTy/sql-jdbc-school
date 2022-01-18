@@ -15,4 +15,8 @@ public class GroupServices {
         List<Group> groupList = randomData.randomGroups();
         groupList.forEach(groupDao::create);
     }
+
+    public List<Group> findGroups (int numberStudent) {
+        return groupDao.findGroups(numberStudent);
+    }
 }

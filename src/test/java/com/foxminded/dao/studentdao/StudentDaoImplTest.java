@@ -1,5 +1,7 @@
 package com.foxminded.dao.studentdao;
 
+import com.foxminded.course.Course;
+import com.foxminded.dao.coursesdao.CourseDaoImpl;
 import com.foxminded.datasource.DataSource;
 import com.foxminded.student.Student;
 import org.h2.tools.RunScript;
@@ -16,6 +18,7 @@ class StudentDaoImplTest {
 
     private final DataSource dataSource = new DataSource();
     private final StudentDaoImpl studentDao = new StudentDaoImpl();
+    private final CourseDaoImpl courseDao = new CourseDaoImpl();
 
     @BeforeEach
     private void createTable() throws SQLException, IOException {
@@ -30,7 +33,6 @@ class StudentDaoImplTest {
         statement.execute("DROP TABLE studentsCourses;");
         statement.execute("DROP TABLE students;");
         statement.execute("DROP TABLE courses;");
-
     }
 
     @Test
@@ -38,18 +40,18 @@ class StudentDaoImplTest {
         Student expectedStudent = testStudent1();
         studentDao.create(expectedStudent);
         Student actualStudent = studentDao.findId(1);
-        Assertions.assertEquals(expectedStudent,actualStudent);
+        Assertions.assertEquals(expectedStudent, actualStudent);
     }
 
     @Test
     void findAll() {
-        List<Student> expectedList = new ArrayList<>() ;
+        List<Student> expectedList = new ArrayList<>();
         expectedList.add(testStudent1());
         expectedList.add(testStudent2());
         studentDao.create(testStudent1());
         studentDao.create(testStudent2());
         List<Student> actualList = studentDao.findAll();
-        Assertions.assertEquals(expectedList,actualList);
+        Assertions.assertEquals(expectedList, actualList);
     }
 
     @Test
@@ -58,7 +60,7 @@ class StudentDaoImplTest {
         studentDao.create(testStudent1());
         studentDao.create(testStudent2());
         Student actualStudent = studentDao.findId(1);
-        Assertions.assertEquals(expectedStudent,actualStudent);
+        Assertions.assertEquals(expectedStudent, actualStudent);
     }
 
     @Test
@@ -66,34 +68,67 @@ class StudentDaoImplTest {
         Student expectedStudent = testStudent1();
         Student updateStudent = testStudent2();
         studentDao.create(testStudent1());
-        studentDao.update(updateStudent,1);
+        studentDao.update(updateStudent, 1);
         Student actualStudent = studentDao.findAll().get(0);
-        Assertions.assertEquals(expectedStudent,actualStudent);
+        Assertions.assertEquals(expectedStudent, actualStudent);
     }
 
     @Test
     void delete() {
-        List<Student> expectedList = new ArrayList<>() ;
+        List<Student> expectedList = new ArrayList<>();
         expectedList.add(testStudent2());
         studentDao.create(testStudent1());
         studentDao.create(testStudent2());
         studentDao.delete(1);
         List<Student> actualList = studentDao.findAll();
-        Assertions.assertEquals(expectedList,actualList);
+        Assertions.assertEquals(expectedList, actualList);
     }
 
-    private Student testStudent1 () {
+    @Test
+    void findStudent() {
+        studentDao.create(testStudent1());
+        studentDao.create(testStudent2());
+        courseDao.create(testCourse1());
+        courseDao.create(testCourse2());
+        studentDao.createTableCourses(testStudent1(), testCourse1());
+        studentDao.createTableCourses(testStudent1(), testCourse2());
+        studentDao.createTableCourses(testStudent2(), testCourse2());
+        List<Student> expectedList = new ArrayList<>();
+        expectedList.add(testStudent1());
+        expectedList.add(testStudent2());
+        List<Student> actualList = studentDao.findStudent("astronomy");
+        Assertions.assertEquals(expectedList, actualList);
+    }
+
+    private Student testStudent1() {
         Student expectedStudent = new Student();
         expectedStudent.setStudentId(1);
         expectedStudent.setFirstName("Vitaly");
         expectedStudent.setLastName("Akimenko");
         return expectedStudent;
     }
-    private Student testStudent2 () {
+
+    private Student testStudent2() {
         Student expectedStudent = new Student();
         expectedStudent.setStudentId(2);
         expectedStudent.setFirstName("Umar");
         expectedStudent.setLastName("Aleksandrenko");
         return expectedStudent;
+    }
+
+    private Course testCourse1() {
+        Course course = new Course();
+        course.setCourseId(1);
+        course.setCourseName("mathematics");
+        course.setCourseDescription("multiplication and division");
+        return course;
+    }
+
+    private Course testCourse2() {
+        Course course = new Course();
+        course.setCourseId(2);
+        course.setCourseName("astronomy");
+        course.setCourseDescription("space");
+        return course;
     }
 }

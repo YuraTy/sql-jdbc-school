@@ -28,8 +28,8 @@ class GroupServicesTest {
     @Mock
     private GroupDaoImpl groupDao;
 
-   @InjectMocks
-    private GroupServices groupServices ;
+    @InjectMocks
+    private GroupServices groupServices;
 
     @BeforeEach
     private void createTable() throws SQLException, IOException {
@@ -45,6 +45,12 @@ class GroupServicesTest {
     @Test
     void fillingGroupsDB() {
         groupServices.fillingGroupsDB();
-        Mockito.verify(groupDao,Mockito.times(20)).create(Mockito.any());
+        Mockito.verify(groupDao, Mockito.times(20)).create(Mockito.any());
+    }
+
+    @Test
+    void findGroups() {
+        groupServices.findGroups(2);
+        Mockito.verify(groupDao).findGroups(Mockito.anyInt());
     }
 }

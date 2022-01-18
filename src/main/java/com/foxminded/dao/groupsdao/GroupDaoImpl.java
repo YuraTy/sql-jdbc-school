@@ -53,7 +53,7 @@ public class GroupDaoImpl implements GroupDao {
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT groupId , groupName FROM groups WHERE groupId=?");) {
             preparedStatement.setInt(1, groupId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 group.setGroupId(resultSet.getInt("groupId"));
                 group.setGroupName(resultSet.getString("groupName"));
             }
@@ -89,7 +89,7 @@ public class GroupDaoImpl implements GroupDao {
         }
     }
 
-    public List<Group> findGroups (int numberStudent){
+    public List<Group> findGroups(int numberStudent) {
         List<Group> groupList = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT groups.groupId , groups.groupName ,COUNT(students.groupId)\n" +

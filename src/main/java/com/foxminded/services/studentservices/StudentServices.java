@@ -13,12 +13,11 @@ import java.util.Map;
 
 public class StudentServices {
 
-    private  StudentDaoImpl studentDao = new StudentDaoImpl() ;
-    private final GroupDaoImpl groupDao = new GroupDaoImpl() ;
-    private final RandomData randomData = new RandomData() ;
+    private  StudentDaoImpl studentDao = new StudentDaoImpl();
+    private final GroupDaoImpl groupDao = new GroupDaoImpl();
+    private final RandomData randomData = new RandomData();
     private static final Map<Group, Integer> sizeCount = new HashMap<>();
     private final int randomNumber = (int) (Math.random() * 19);
-
 
     public void fillingStudentsDB() {
         List<Student> studentList = randomData.randomStudent();
@@ -30,28 +29,32 @@ public class StudentServices {
 
     private Group checkGroup(Group group) {
         List<Group> groupList = groupDao.findAll();
-        if (!sizeCount.containsKey(group)){
-            sizeCount.put(group,1);
+        if (!sizeCount.containsKey(group)) {
+            sizeCount.put(group, 1);
             return group;
-        }else if(sizeCount.get(group) >= 10 && sizeCount.get(group) <= 30) {
+        } else if (sizeCount.get(group) >= 10 && sizeCount.get(group) <= 30) {
             sizeCount.put(group, sizeCount.get(group) + 1);
             return group;
         } else return groupList.get(randomNumber);
     }
 
-    public void newStudent (Student student) {
+    public void newStudent(Student student) {
         studentDao.create(student);
     }
 
-    public void deleteStudent (int idStudent){
+    public void deleteStudent(int idStudent) {
         studentDao.delete(idStudent);
     }
 
-    public void addStudentForCourse (Student student , Course course){
-        studentDao.createTableCourses(student,course);
+    public void addStudentForCourse(Student student, Course course) {
+        studentDao.createTableCourses(student, course);
     }
 
-    public void deleteCourseForStudent (Student student , Course course){
-        studentDao.deleteStudentFromCourse(student,course);
+    public void deleteCourseForStudent(Student student, Course course) {
+        studentDao.deleteStudentFromCourse(student, course);
+    }
+
+    public List<Student> findStudent(String namedCourse) {
+        return studentDao.findStudent(namedCourse);
     }
 }

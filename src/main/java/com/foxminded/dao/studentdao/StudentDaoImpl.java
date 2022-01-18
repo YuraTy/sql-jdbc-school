@@ -56,14 +56,14 @@ public class StudentDaoImpl implements StudentDao {
     public Student findId(int studentId) {
         Student student = new Student();
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement findById = connection.prepareStatement("SELECT groupId , firstName , lastName FROM students WHERE studentId=?")) {
-            findById.setInt(1, studentId); // for some reason gives an error "org.h2.jdbc.JdbcSQLSyntaxErrorException: Столбец "studentId" не найден"
-            ResultSet resultSet = findById.executeQuery();
-            if(resultSet.next()) {
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT studentId , groupId , firstName , lastName FROM students WHERE studentId=?")) {
+            preparedStatement.setInt(1, studentId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                student.setStudentId(resultSet.getInt("studentId"));
                 student.setGroupId(resultSet.getInt("groupId"));
                 student.setFirstName(resultSet.getString("firstName"));
-                student.setFirstName(resultSet.getString("lastName"));
-                student.setStudentId(resultSet.getInt("studentId"));
+                student.setLastName(resultSet.getString("lastName"));
             }
             return student;
         } catch (SQLException | IOException e) {
@@ -109,7 +109,7 @@ public class StudentDaoImpl implements StudentDao {
         }
     }
 
-    public void deleteStudentFromCourse (Student student , Course course){
+    public void deleteStudentFromCourse(Student student, Course course) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM studentsCourses WHERE (studentId = ?, courseId = ?)")) {
             preparedStatement.setInt(1, student.getStudentId());
@@ -118,5 +118,31 @@ public class StudentDaoImpl implements StudentDao {
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Student> findStudent(String namedCourse) {
+        List<Student> studentsList = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT students.studentId,students.firstName,students.lastName,students.groupId\n" +
+                     "FROM students students\n" +
+                     "INNER JOIN studentsCourses studentsCourses ON students.StudentId = studentsCourses.StudentId\n" +
+                     "INNER JOIN courses courses ON courses.CourseId = studentsCourses.CourseId\n" +
+                     "WHERE courses.CourseName LIKE ?")) {
+            preparedStatement.setString(1, namedCourse);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Student student = new Student();
+                student.setStudentId(resultSet.getInt("studentId"));
+                student.setGroupId(resultSet.getInt("groupId"));
+                student.setFirstName(resultSet.getString("firstName"));
+                student.setLastName(resultSet.getString("lastName"));
+                studentsList.add(student);
+            }
+            return studentsList;
+        } catch (SQLException | IOException e) {
+            System.err.println("Failed to read data from database");
+            e.printStackTrace();
+        }
+        return studentsList;
     }
 }

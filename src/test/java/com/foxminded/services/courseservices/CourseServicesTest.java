@@ -4,6 +4,7 @@ import com.foxminded.course.Course;
 import com.foxminded.dao.coursesdao.CourseDaoImpl;
 import com.foxminded.dao.studentdao.StudentDaoImpl;
 import com.foxminded.datasource.DataSource;
+import com.foxminded.randomdata.RandomData;
 import com.foxminded.services.groupservices.GroupServices;
 import com.foxminded.services.studentservices.StudentServices;
 import com.foxminded.student.Student;
@@ -23,7 +24,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
@@ -59,60 +59,28 @@ class CourseServicesTest {
         statement.execute("DROP TABLE groups;");
     }
 
-
     @Test
-    void fillingCoursesDB(){
+    void fillingCoursesDB() {
         courseServices.fillingCoursesDB();
-        Mockito.verify(courseDao,Mockito.times(20)).create(Mockito.any());
+        Mockito.verify(courseDao, Mockito.times(20)).create(Mockito.any());
     }
 
     @Test
     void fillingStudentsCourses() {
-        List<Course> listcourse = new ArrayList<>();
-        listcourse.add(testCourse1());
-        listcourse.add(testCourse2());
-        List<Student> listStudent = new ArrayList<>();
-        listStudent.add(testStudent1());
-        listStudent.add(testStudent2());
-        Mockito.when(studentDao.findAll()).thenReturn(listStudent);
-        Mockito.when(courseDao.findAll()).thenReturn(listcourse);
+        Mockito.when(studentDao.findAll()).thenReturn(testRandomListStudent());
+        Mockito.when(courseDao.findAll()).thenReturn(testRandomListCourse());
         groupServices.fillingGroupsDB();
         studentServices.fillingStudentsDB();
         courseServices.fillingCoursesDB();
         courseServices.fillingStudentsCourses();
-        Mockito.verify(studentDao,Mockito.times(200)).createTableCourses(Mockito.any(),Mockito.any());
-    }
-    private Student testStudent1 () {
-        Student expectedStudent = new Student();
-        expectedStudent.setStudentId(1);
-        expectedStudent.setFirstName("Vitaly");
-        expectedStudent.setLastName("Akimenko");
-        expectedStudent.setGroupId(2);
-        return expectedStudent;
-    }
-    private Student testStudent2 () {
-        Student expectedStudent = new Student();
-        expectedStudent.setStudentId(2);
-        expectedStudent.setFirstName("Umar");
-        expectedStudent.setLastName("Aleksandrenko");
-        expectedStudent.setGroupId(45);
-        return expectedStudent;
+        Mockito.verify(studentDao, Mockito.times(200)).createTableCourses(Mockito.any(), Mockito.any());
     }
 
-    private Course testCourse1 (){
-        Course course = new Course();
-        course.setCourseId(1);
-        course.setCourseName("mathematics");
-        course.setCourseDescription("multiplication and division");
-        return course;
+    private List<Course> testRandomListCourse() {
+        return new RandomData().randomCourses();
     }
 
-    private Course testCourse2 (){
-        Course course = new Course();
-        course.setCourseId(2);
-        course.setCourseName("astronomy");
-        course.setCourseDescription("space");
-        return course;
+    private List<Student> testRandomListStudent() {
+        return new RandomData().randomStudent();
     }
-
 }
