@@ -7,6 +7,20 @@ public class Student {
     private int groupId;
     private int studentId;
 
+    public Student(String firstName, String lastName, int groupId) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.groupId = groupId;
+    }
+
+    public Student(int studentId, String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.studentId = studentId;
+    }
+
+    public Student(){}
+
     @Override
     public int hashCode() {
         return super.hashCode();
@@ -49,9 +63,6 @@ public class Student {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
-        if (firstName.equals(student.firstName) && lastName.equals(student.lastName)){
-            return true;
-        }
-        return false;
+        return firstName.equals(student.firstName) && lastName.equals(student.lastName);
     }
 }

@@ -18,6 +18,8 @@ public class StudentServices {
     private final RandomData randomData = new RandomData();
     private static final Map<Group, Integer> sizeCount = new HashMap<>();
     private final int randomNumber = (int) (Math.random() * 19);
+    private static final int STUDENTS_IN_GROUP_MIN = 10;
+    private static final int STUDENTS_IN_GROUP_MAX = 30;
 
     public void fillingStudentsDB() {
         List<Student> studentList = randomData.randomStudent();
@@ -32,7 +34,7 @@ public class StudentServices {
         if (!sizeCount.containsKey(group)) {
             sizeCount.put(group, 1);
             return group;
-        } else if (sizeCount.get(group) >= 10 && sizeCount.get(group) <= 30) {
+        } else if (sizeCount.get(group) >= STUDENTS_IN_GROUP_MIN && sizeCount.get(group) <= STUDENTS_IN_GROUP_MAX) {
             sizeCount.put(group, sizeCount.get(group) + 1);
             return group;
         } else return groupList.get(randomNumber);
@@ -54,7 +56,7 @@ public class StudentServices {
         studentDao.deleteStudentFromCourse(student, course);
     }
 
-    public List<Student> findStudent(String namedCourse) {
-        return studentDao.findStudent(namedCourse);
+    public List<Student> findStudentsByCourse(String namedCourse) {
+        return studentDao.findStudentsByCourse(namedCourse);
     }
 }

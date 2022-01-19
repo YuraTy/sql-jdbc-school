@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 class CourseDaoImplTest {
 
@@ -44,8 +45,7 @@ class CourseDaoImplTest {
         List<Course> expectedList = new ArrayList<>() ;
         expectedList.add(testCourse1());
         expectedList.add(testCourse2());
-        courseDao.create(testCourse1());
-        courseDao.create(testCourse2());
+        Stream.of(testCourse1(),testCourse1()).forEach(courseDao::create);
         List<Course> actualList = courseDao.findAll();
         Assertions.assertEquals(expectedList,actualList);
     }
@@ -73,26 +73,17 @@ class CourseDaoImplTest {
     void delete() {
         List<Course> expectedList = new ArrayList<>() ;
         expectedList.add(testCourse1());
-        courseDao.create(testCourse1());
-        courseDao.create(testCourse2());
+        Stream.of(testCourse1(),testCourse1()).forEach(courseDao::create);
         courseDao.delete(2);
         List<Course> actualList = courseDao.findAll();
         Assertions.assertEquals(expectedList,actualList);
     }
 
     private Course testCourse1 (){
-        Course course = new Course();
-        course.setCourseId(1);
-        course.setCourseName("mathematics");
-        course.setCourseDescription("multiplication and division");
-        return course;
+        return new Course(1,"mathematics");
     }
 
     private Course testCourse2 (){
-        Course course = new Course();
-        course.setCourseId(2);
-        course.setCourseName("astronomy");
-        course.setCourseDescription("space");
-        return course;
+        return new Course(2,"astronomy");
     }
 }

@@ -120,7 +120,7 @@ public class StudentDaoImpl implements StudentDao {
         }
     }
 
-    public List<Student> findStudent(String namedCourse) {
+    public List<Student> findStudentsByCourse(String namedCourse) {
         List<Student> studentsList = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT students.studentId,students.firstName,students.lastName,students.groupId\n" +

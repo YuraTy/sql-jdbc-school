@@ -14,8 +14,10 @@ public class CourseServices {
     private final RandomData randomData = new RandomData();
     private  StudentDaoImpl studentDao ;
     private static final Map<Student, Integer> courseSize = new HashMap<>();
+    private final int randomNumber = COURSE_FOR_STUDENTS_MIN + (int) (Math.random() * COURSE_FOR_STUDENTS_MAX) ;
 
-    private final int randomNumber = 1 + (int) (Math.random() * 3) ;
+    private static final int COURSE_FOR_STUDENTS_MIN = 1;
+    private static final int COURSE_FOR_STUDENTS_MAX = 3;
 
     public void fillingCoursesDB() {
         randomData.randomCourses().forEach(courseDao::create);
@@ -32,7 +34,7 @@ public class CourseServices {
         if (!courseSize.containsKey(student)) {
             courseSize.put(student, 1);
             return student;
-        }else if (courseSize.get(student) >= 1 && courseSize.get(student) <= 3) {
+        }else if (courseSize.get(student) >= COURSE_FOR_STUDENTS_MIN && courseSize.get(student) <= COURSE_FOR_STUDENTS_MAX) {
             courseSize.put(student, courseSize.get(student) + 1);
             return student;
         } else return studentList.get(randomNumber);

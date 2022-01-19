@@ -89,7 +89,7 @@ public class GroupDaoImpl implements GroupDao {
         }
     }
 
-    public List<Group> findGroups(int numberStudent) {
+    public List<Group> findGroupsByNumberOfStudents(int numberStudent) {
         List<Group> groupList = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT groups.groupId , groups.groupName ,COUNT(students.groupId)\n" +

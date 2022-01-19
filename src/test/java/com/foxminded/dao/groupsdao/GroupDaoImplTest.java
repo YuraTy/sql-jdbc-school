@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 class GroupDaoImplTest {
 
@@ -49,8 +50,7 @@ class GroupDaoImplTest {
         List<Group> expectedList = new ArrayList<>();
         expectedList.add(testGroup1());
         expectedList.add(testGroup2());
-        groupDao.create(testGroup1());
-        groupDao.create(testGroup2());
+        Stream.of(testGroup1(),testGroup2()).forEach(groupDao::create);
         List<Group> actualList = groupDao.findAll();
         Assertions.assertEquals(expectedList,actualList);
     }
@@ -58,8 +58,7 @@ class GroupDaoImplTest {
     @Test
     void findId() {
         Group expectedGroup = testGroup2();
-        groupDao.create(testGroup1());
-        groupDao.create(testGroup2());
+        Stream.of(testGroup1(),testGroup2()).forEach(groupDao::create);
         Group actualGroup = groupDao.findId(2);
         Assertions.assertEquals(expectedGroup,actualGroup);
     }
@@ -78,59 +77,39 @@ class GroupDaoImplTest {
     void delete() {
         List<Group> expectedList = new ArrayList<>();
         expectedList.add(testGroup1());
-        groupDao.create(testGroup1());
-        groupDao.create(testGroup2());
+        Stream.of(testGroup1(),testGroup2()).forEach(groupDao::create);
         groupDao.delete(2);
         List<Group> actualList = groupDao.findAll();
         Assertions.assertEquals(expectedList,actualList);
     }
 
     @Test
-    void findGroups() {
-    studentDao.create(testStudent1());
-    studentDao.create(testStudent2());
-    studentDao.create(testStudent3());
-    groupDao.create(testGroup1());
-    groupDao.create(testGroup2());
-    List<Group> actualList = groupDao.findGroups(1);
-    List<Group> expectedList = new ArrayList<>();
-    expectedList.add(testGroup1());
-    Assertions.assertEquals(expectedList,actualList);
+    void findGroupsByNumberOfStudents() {
+        Stream.of(testStudent1(),testStudent2(),testStudent3()).forEach(studentDao::create);
+        Stream.of(testGroup1(),testGroup2()).forEach(groupDao::create);
+        List<Group> actualList = groupDao.findGroupsByNumberOfStudents(1);
+        List<Group> expectedList = new ArrayList<>();
+        expectedList.add(testGroup1());
+        Assertions.assertEquals(expectedList,actualList);
     }
 
     private Group testGroup1 (){
-        Group group = new Group();
-        group.setGroupName("NG-22");
-        return group;
+        return new Group("NG-22");
     }
 
     private Group testGroup2 (){
-        Group group = new Group();
-        group.setGroupName("DC-63");
-        return group;
+        return new Group("DC-63");
     }
 
     private Student testStudent1() {
-        Student student = new Student();
-        student.setLastName("Ivan");
-        student.setLastName("Pavlovich");
-        student.setGroupId(1);
-        return student;
+        return new Student("Ivan","Pavlovich",1);
     }
 
     private Student testStudent2() {
-        Student student = new Student();
-        student.setLastName("Nikolay");
-        student.setLastName("Bobrov");
-        student.setGroupId(2);
-        return student;
+        return new Student("Nikolay","Bobrov",2);
     }
 
     private Student testStudent3() {
-        Student student = new Student();
-        student.setLastName("Vova");
-        student.setLastName("Dudkin");
-        student.setGroupId(2);
-        return student;
+        return new Student("Vova","Dudkin",2);
     }
 }

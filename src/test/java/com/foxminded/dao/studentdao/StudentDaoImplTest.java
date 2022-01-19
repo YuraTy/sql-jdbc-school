@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 class StudentDaoImplTest {
 
@@ -48,8 +49,7 @@ class StudentDaoImplTest {
         List<Student> expectedList = new ArrayList<>();
         expectedList.add(testStudent1());
         expectedList.add(testStudent2());
-        studentDao.create(testStudent1());
-        studentDao.create(testStudent2());
+        Stream.of(testStudent1(),testStudent2()).forEach(studentDao::create);
         List<Student> actualList = studentDao.findAll();
         Assertions.assertEquals(expectedList, actualList);
     }
@@ -57,8 +57,7 @@ class StudentDaoImplTest {
     @Test
     void findId() {
         Student expectedStudent = testStudent1();
-        studentDao.create(testStudent1());
-        studentDao.create(testStudent2());
+        Stream.of(testStudent1(),testStudent2()).forEach(studentDao::create);
         Student actualStudent = studentDao.findId(1);
         Assertions.assertEquals(expectedStudent, actualStudent);
     }
@@ -77,58 +76,39 @@ class StudentDaoImplTest {
     void delete() {
         List<Student> expectedList = new ArrayList<>();
         expectedList.add(testStudent2());
-        studentDao.create(testStudent1());
-        studentDao.create(testStudent2());
+        Stream.of(testStudent1(),testStudent2()).forEach(studentDao::create);
         studentDao.delete(1);
         List<Student> actualList = studentDao.findAll();
         Assertions.assertEquals(expectedList, actualList);
     }
 
     @Test
-    void findStudent() {
-        studentDao.create(testStudent1());
-        studentDao.create(testStudent2());
-        courseDao.create(testCourse1());
-        courseDao.create(testCourse2());
+    void findStudentsByCourse() {
+        Stream.of(testStudent1(),testStudent2()).forEach(studentDao::create);
+        Stream.of(testCourse1(),testCourse2()).forEach(courseDao::create);
         studentDao.createTableCourses(testStudent1(), testCourse1());
         studentDao.createTableCourses(testStudent1(), testCourse2());
         studentDao.createTableCourses(testStudent2(), testCourse2());
         List<Student> expectedList = new ArrayList<>();
         expectedList.add(testStudent1());
         expectedList.add(testStudent2());
-        List<Student> actualList = studentDao.findStudent("astronomy");
+        List<Student> actualList = studentDao.findStudentsByCourse("astronomy");
         Assertions.assertEquals(expectedList, actualList);
     }
 
     private Student testStudent1() {
-        Student expectedStudent = new Student();
-        expectedStudent.setStudentId(1);
-        expectedStudent.setFirstName("Vitaly");
-        expectedStudent.setLastName("Akimenko");
-        return expectedStudent;
+        return new Student(1,"Vitaly","Akimenko");
     }
 
     private Student testStudent2() {
-        Student expectedStudent = new Student();
-        expectedStudent.setStudentId(2);
-        expectedStudent.setFirstName("Umar");
-        expectedStudent.setLastName("Aleksandrenko");
-        return expectedStudent;
+        return new Student(2,"Umar","Aleksandrenko");
     }
 
     private Course testCourse1() {
-        Course course = new Course();
-        course.setCourseId(1);
-        course.setCourseName("mathematics");
-        course.setCourseDescription("multiplication and division");
-        return course;
+        return new Course(1,"mathematics");
     }
 
     private Course testCourse2() {
-        Course course = new Course();
-        course.setCourseId(2);
-        course.setCourseName("astronomy");
-        course.setCourseDescription("space");
-        return course;
+        return new Course(2,"astronomy");
     }
 }

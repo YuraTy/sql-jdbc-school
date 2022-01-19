@@ -6,6 +6,14 @@ public class Course {
     private String courseName;
     private String courseDescription;
 
+
+    public Course (){}
+
+    public Course(int courseId, String courseName) {
+        this.courseId = courseId;
+        this.courseName = courseName;
+    }
+
     public int getCourseId() {
         return courseId;
     }

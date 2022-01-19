@@ -83,24 +83,16 @@ class StudentServicesTest {
     }
 
     @Test
-    void findStudent() {
-        studentServices.findStudent("mathematics");
-        Mockito.verify(studentDao).findStudent(Mockito.anyString());
+    void findStudentsByCourse() {
+        studentServices.findStudentsByCourse("mathematics");
+        Mockito.verify(studentDao).findStudentsByCourse(Mockito.anyString());
     }
 
     private Student testStudent1() {
-        Student expectedStudent = new Student();
-        expectedStudent.setStudentId(1);
-        expectedStudent.setFirstName("Vitaly");
-        expectedStudent.setLastName("Akimenko");
-        return expectedStudent;
+        return new Student(1,"Vitaly","Akimenko");
     }
 
     private Course testCourse1() {
-        Course course = new Course();
-        course.setCourseId(1);
-        course.setCourseName("mathematics");
-        course.setCourseDescription("multiplication and division");
-        return course;
+        return new Course(1,"mathematics");
     }
 }

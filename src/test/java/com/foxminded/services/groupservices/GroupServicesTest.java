@@ -49,8 +49,8 @@ class GroupServicesTest {
     }
 
     @Test
-    void findGroups() {
-        groupServices.findGroups(2);
-        Mockito.verify(groupDao).findGroups(Mockito.anyInt());
+    void findGroupsByNumberOfStudents() {
+        groupServices.findGroupsByNumberOfStudents(2);
+        Mockito.verify(groupDao).findGroupsByNumberOfStudents(Mockito.anyInt());
     }
 }
