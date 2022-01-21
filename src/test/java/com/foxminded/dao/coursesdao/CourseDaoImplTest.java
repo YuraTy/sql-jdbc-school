@@ -34,8 +34,8 @@ class CourseDaoImplTest {
 
     @Test
     void create() {
-        Course expectedCourse = testCourse1();
-        courseDao.create(testCourse1());
+        Course expectedCourse = new Course(1,"mathematics");
+        courseDao.create(new Course(1,"mathematics"));
         Course actualCourse = courseDao.findId(1);
         Assertions.assertEquals(expectedCourse,actualCourse);
     }
@@ -43,27 +43,27 @@ class CourseDaoImplTest {
     @Test
     void findAll() {
         List<Course> expectedList = new ArrayList<>() ;
-        expectedList.add(testCourse1());
-        expectedList.add(testCourse2());
-        Stream.of(testCourse1(),testCourse1()).forEach(courseDao::create);
+        expectedList.add(new Course(1,"mathematics"));
+        expectedList.add(new Course(2,"astronomy"));
+        Stream.of(new Course(1,"mathematics"),new Course(2,"astronomy")).forEach(courseDao::create);
         List<Course> actualList = courseDao.findAll();
         Assertions.assertEquals(expectedList,actualList);
     }
 
     @Test
     void findId() {
-        Course expectedCourse = testCourse2();
-        courseDao.create(testCourse1());
-        courseDao.create(testCourse2());
+        Course expectedCourse = new Course(2,"astronomy");
+        courseDao.create(new Course(1,"mathematics"));
+        courseDao.create(new Course(2,"astronomy"));
         Course actualCourse = courseDao.findId(2);
         Assertions.assertEquals(expectedCourse,actualCourse);
     }
 
     @Test
     void update() {
-        Course expectedCourse = testCourse2();
-        Course updateCourse = testCourse2();
-        courseDao.create(testCourse1());
+        Course expectedCourse = new Course(2,"astronomy");
+        Course updateCourse = new Course(2,"astronomy");
+        courseDao.create(new Course(1,"mathematics"));
         courseDao.update(updateCourse,1);
         Course actualCourse = courseDao.findId(1);
         Assertions.assertEquals(expectedCourse,actualCourse);
@@ -72,18 +72,10 @@ class CourseDaoImplTest {
     @Test
     void delete() {
         List<Course> expectedList = new ArrayList<>() ;
-        expectedList.add(testCourse1());
-        Stream.of(testCourse1(),testCourse1()).forEach(courseDao::create);
+        expectedList.add(new Course(1,"mathematics"));
+        Stream.of(new Course(1,"mathematics"),new Course(2,"astronomy")).forEach(courseDao::create);
         courseDao.delete(2);
         List<Course> actualList = courseDao.findAll();
         Assertions.assertEquals(expectedList,actualList);
-    }
-
-    private Course testCourse1 (){
-        return new Course(1,"mathematics");
-    }
-
-    private Course testCourse2 (){
-        return new Course(2,"astronomy");
     }
 }

@@ -72,13 +72,13 @@ class StudentServicesTest {
 
     @Test
     void addStudentOnCourse() {
-        studentServices.addStudentForCourse(testStudent1(), testCourse1());
+        studentServices.addStudentForCourse(testStudent1().getStudentId(), testCourse1().getCourseId());
         Mockito.verify(studentDao).createTableCourses(Mockito.any(), Mockito.any());
     }
 
     @Test
     void deleteCourseForStudent() {
-        studentServices.deleteCourseForStudent(testStudent1(), testCourse1());
+        studentServices.deleteCourseForStudent(testStudent1().getStudentId(), testCourse1().getCourseId());
         Mockito.verify(studentDao).deleteStudentFromCourse(Mockito.any(), Mockito.any());
     }
 

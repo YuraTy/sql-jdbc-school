@@ -98,22 +98,22 @@ public class StudentDaoImpl implements StudentDao {
         }
     }
 
-    public void createTableCourses(Student student, Course course) {
+    public void createTableCourses(int studentId, int courseId) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO studentsCourses VALUES(?,?)")) {
-            preparedStatement.setInt(1, student.getStudentId());
-            preparedStatement.setInt(2, course.getCourseId());
+            preparedStatement.setInt(1, studentId);
+            preparedStatement.setInt(2, courseId);
             preparedStatement.execute();
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void deleteStudentFromCourse(Student student, Course course) {
+    public void deleteStudentFromCourse(int studentId, int courseId) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM studentsCourses WHERE (studentId = ?, courseId = ?)")) {
-            preparedStatement.setInt(1, student.getStudentId());
-            preparedStatement.setInt(2, course.getCourseId());
+            preparedStatement.setInt(1, studentId);
+            preparedStatement.setInt(2, courseId);
             preparedStatement.execute();
         } catch (SQLException | IOException e) {
             e.printStackTrace();

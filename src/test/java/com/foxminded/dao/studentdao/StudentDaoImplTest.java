@@ -86,9 +86,9 @@ class StudentDaoImplTest {
     void findStudentsByCourse() {
         Stream.of(testStudent1(),testStudent2()).forEach(studentDao::create);
         Stream.of(testCourse1(),testCourse2()).forEach(courseDao::create);
-        studentDao.createTableCourses(testStudent1(), testCourse1());
-        studentDao.createTableCourses(testStudent1(), testCourse2());
-        studentDao.createTableCourses(testStudent2(), testCourse2());
+        studentDao.createTableCourses(testStudent1().getStudentId(), testCourse1().getCourseId());
+        studentDao.createTableCourses(testStudent1().getStudentId(), testCourse2().getCourseId());
+        studentDao.createTableCourses(testStudent2().getStudentId(), testCourse2().getCourseId());
         List<Student> expectedList = new ArrayList<>();
         expectedList.add(testStudent1());
         expectedList.add(testStudent2());
