@@ -2,8 +2,6 @@ package com.foxminded.school;
 
 import com.foxminded.course.Course;
 import com.foxminded.datasource.DataSource;
-import com.foxminded.services.courseservices.CourseServices;
-import com.foxminded.services.groupservices.GroupServices;
 import com.foxminded.services.studentservices.StudentServices;
 import com.foxminded.stringformatter.StringFormatter;
 import com.foxminded.student.Student;
@@ -19,17 +17,15 @@ public class School {
     public static void main(String[] args) throws SQLException, IOException {
         DataSource dataSource = new DataSource();
         createTable(dataSource);
-        CourseServices courseServices = new CourseServices();
         StudentServices studentServices = new StudentServices();
-        GroupServices groupServices = new GroupServices();
         StringFormatter stringFormatter = new StringFormatter();
 
-        System.out.println("1-Find all groups with fewer or fewer students\n" +
+        System.out.println("1-Find all groups with fewer or fewer Students\n" +
                 "2-Find all students who are relevant to the course with the given names\n" +
                 "3-Add a new student\n" +
                 "4-Remove student by STUDENT_ID\n" +
                 "5-Add a student to the course\n" +
-                "6-Exclude a student from one of his courses");
+                "6-Exclude a student from one of his Courses");
         Scanner scanner = new Scanner(System.in);
         String input = null;
         int select = 0;
@@ -61,6 +57,7 @@ public class School {
                 System.out.println("Enter student group Id:");
                 input = scanner.next();
                 student.setGroupId(Integer.parseInt(input));
+                studentServices.newStudent(student);
                 break;
             case 4:
                 System.out.println("Enter the student ID to delete:");
@@ -73,7 +70,7 @@ public class School {
                 int idStudent = Integer.parseInt(input);
                 System.out.println("Enter Course ID:");
                 input = scanner.next();
-                studentServices.deleteCourseForStudent(idStudent,Integer.parseInt(input));
+                studentServices.deleteCourseForStudent(new Student(idStudent),new Course(Integer.parseInt(input)));
                 break;
             case 6:
                 stringFormatter.allListStudent();
@@ -83,7 +80,7 @@ public class School {
                 int idStudentAdd = Integer.parseInt(input);
                 System.out.println("Enter Course ID:");
                 input = scanner.next();
-                studentServices.addStudentForCourse(idStudentAdd,Integer.parseInt(input));
+                studentServices.addStudentForCourse(new Student(idStudentAdd),new Course(Integer.parseInt(input)));
                 break;
             default:
                 System.out.println("Incorrect data entered");
@@ -99,9 +96,9 @@ public class School {
 
     public static void deleteTable(DataSource dataSource) throws SQLException, IOException {
         Statement statement = dataSource.getConnection().createStatement();
-        statement.execute("DROP TABLE studentsCourses;");
-        statement.execute("DROP TABLE students;");
-        statement.execute("DROP TABLE groups;");
-        statement.execute("DROP TABLE courses;");
+        statement.execute("DROP TABLE StudentsCourses;");
+        statement.execute("DROP TABLE Students;");
+        statement.execute("DROP TABLE Groups;");
+        statement.execute("DROP TABLE Courses;");
     }
 }

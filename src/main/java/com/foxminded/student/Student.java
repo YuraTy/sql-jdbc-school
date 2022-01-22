@@ -21,6 +21,10 @@ public class Student {
 
     public Student(){}
 
+    public Student(int studentId) {
+        this.studentId = studentId;
+    }
+
     @Override
     public int hashCode() {
         return super.hashCode();

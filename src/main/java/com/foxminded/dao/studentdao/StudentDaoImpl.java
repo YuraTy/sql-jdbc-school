@@ -19,7 +19,7 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public void create(Student student) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO students SET firstName=? , lastName=? , groupId=? ")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Students SET FirstName=? , LastName=? , GroupId=? ")) {
             preparedStatement.setString(1, student.getFirstName());
             preparedStatement.setString(2, student.getLastName());
             preparedStatement.setInt(3, student.getGroupId());
@@ -34,14 +34,14 @@ public class StudentDaoImpl implements StudentDao {
     public List<Student> findAll() {
         List<Student> studentsList = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT studentId , groupId , firstName , lastName FROM students");
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT StudentId , GroupId , FirstName , LastName FROM Students");
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
                 Student student = new Student();
-                student.setStudentId(resultSet.getInt("studentId"));
-                student.setGroupId(resultSet.getInt("groupId"));
-                student.setFirstName(resultSet.getString("firstName"));
-                student.setLastName(resultSet.getString("lastName"));
+                student.setStudentId(resultSet.getInt("StudentId"));
+                student.setGroupId(resultSet.getInt("GroupId"));
+                student.setFirstName(resultSet.getString("FirstName"));
+                student.setLastName(resultSet.getString("LastName"));
                 studentsList.add(student);
             }
             return studentsList;
@@ -56,14 +56,14 @@ public class StudentDaoImpl implements StudentDao {
     public Student findId(int studentId) {
         Student student = new Student();
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT studentId , groupId , firstName , lastName FROM students WHERE studentId=?")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT StudentId , GroupId , FirstName , LastName FROM Students WHERE StudentId=?")) {
             preparedStatement.setInt(1, studentId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                student.setStudentId(resultSet.getInt("studentId"));
-                student.setGroupId(resultSet.getInt("groupId"));
-                student.setFirstName(resultSet.getString("firstName"));
-                student.setLastName(resultSet.getString("lastName"));
+                student.setStudentId(resultSet.getInt("StudentId"));
+                student.setGroupId(resultSet.getInt("GroupId"));
+                student.setFirstName(resultSet.getString("FirstName"));
+                student.setLastName(resultSet.getString("LastName"));
             }
             return student;
         } catch (SQLException | IOException e) {
@@ -76,7 +76,7 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public void update(Student student, int studentId) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement updateById = connection.prepareStatement("UPDATE students SET groupId = ? , firstName = ? , lastName = ? WHERE studentId = ?")) {
+             PreparedStatement updateById = connection.prepareStatement("UPDATE Students SET GroupId = ? , FirstName = ? , LastName = ? WHERE StudentId = ?")) {
             updateById.setInt(1, student.getGroupId());
             updateById.setString(2, student.getFirstName());
             updateById.setString(3, student.getLastName());
@@ -90,7 +90,7 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public void delete(int studentId) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM students WHERE studentId = ? ")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Students WHERE StudentId = ? ")) {
             preparedStatement.setInt(1, studentId);
             preparedStatement.execute();
         } catch (SQLException | IOException e) {
@@ -98,44 +98,44 @@ public class StudentDaoImpl implements StudentDao {
         }
     }
 
-    public void createTableCourses(int studentId, int courseId) {
+    public void createTableCourses(Student student, Course course) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO studentsCourses VALUES(?,?)")) {
-            preparedStatement.setInt(1, studentId);
-            preparedStatement.setInt(2, courseId);
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO StudentsCourses VALUES(?,?)")) {
+            preparedStatement.setInt(1, student.getStudentId());
+            preparedStatement.setInt(2, course.getCourseId());
             preparedStatement.execute();
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void deleteStudentFromCourse(int studentId, int courseId) {
+    public void deleteStudentFromCourse(Student student, Course course) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM studentsCourses WHERE (studentId = ?, courseId = ?)")) {
-            preparedStatement.setInt(1, studentId);
-            preparedStatement.setInt(2, courseId);
+             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM StudentsCourses WHERE (StudentId = ?, CourseId = ?)")) {
+            preparedStatement.setInt(1, student.getStudentId());
+            preparedStatement.setInt(2, course.getCourseId());
             preparedStatement.execute();
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
     }
 
-    public List<Student> findStudentsByCourse(String namedCourse) {
+    public List<Student> findStudentsByCourse(Course course) {
         List<Student> studentsList = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT students.studentId,students.firstName,students.lastName,students.groupId\n" +
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT Students.StudentId,Students.FirstName,students.LastName,students.GroupId\n" +
                      "FROM students students\n" +
-                     "INNER JOIN studentsCourses studentsCourses ON students.StudentId = studentsCourses.StudentId\n" +
-                     "INNER JOIN courses courses ON courses.CourseId = studentsCourses.CourseId\n" +
-                     "WHERE courses.CourseName LIKE ?")) {
-            preparedStatement.setString(1, namedCourse);
+                     "INNER JOIN StudentsCourses StudentsCourses ON students.StudentId = StudentsCourses.StudentId\n" +
+                     "INNER JOIN Courses Courses ON Courses.CourseId = StudentsCourses.CourseId\n" +
+                     "WHERE Courses.CourseName LIKE ?")) {
+            preparedStatement.setString(1, course.getCourseName());
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Student student = new Student();
-                student.setStudentId(resultSet.getInt("studentId"));
-                student.setGroupId(resultSet.getInt("groupId"));
-                student.setFirstName(resultSet.getString("firstName"));
-                student.setLastName(resultSet.getString("lastName"));
+                student.setStudentId(resultSet.getInt("StudentId"));
+                student.setGroupId(resultSet.getInt("GroupId"));
+                student.setFirstName(resultSet.getString("FirstName"));
+                student.setLastName(resultSet.getString("LastName"));
                 studentsList.add(student);
             }
             return studentsList;

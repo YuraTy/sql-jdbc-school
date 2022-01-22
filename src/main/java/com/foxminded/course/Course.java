@@ -14,6 +14,10 @@ public class Course {
         this.courseName = courseName;
     }
 
+    public Course(int courseId) {
+        this.courseId = courseId;
+    }
+
     public int getCourseId() {
         return courseId;
     }

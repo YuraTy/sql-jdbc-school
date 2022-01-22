@@ -18,7 +18,7 @@ public class GroupDaoImpl implements GroupDao {
     @Override
     public void create(Group group) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO groups SET groupName=?")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Groups SET GroupName=?")) {
             preparedStatement.setString(1, group.getGroupName());
             preparedStatement.execute();
         } catch (SQLException | IOException e) {
@@ -30,12 +30,12 @@ public class GroupDaoImpl implements GroupDao {
     public List<Group> findAll() {
         List<Group> allGroup = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT groupId , groupName FROM groups");
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT GroupId , GroupName FROM Groups");
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
                 Group group = new Group();
-                group.setGroupId(resultSet.getInt("groupId"));
-                group.setGroupName(resultSet.getString("groupName"));
+                group.setGroupId(resultSet.getInt("GroupId"));
+                group.setGroupName(resultSet.getString("GroupName"));
                 allGroup.add(group);
             }
             return allGroup;
@@ -50,11 +50,11 @@ public class GroupDaoImpl implements GroupDao {
     public Group findId(int groupId) {
         Group group = new Group();
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT groupId , groupName FROM groups WHERE groupId=?");) {
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT GroupId , GroupName FROM Groups WHERE GroupId=?");) {
             preparedStatement.setInt(1, groupId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                group.setGroupId(resultSet.getInt("groupId"));
+                group.setGroupId(resultSet.getInt("GroupId"));
                 group.setGroupName(resultSet.getString("groupName"));
             }
             return group;
@@ -68,7 +68,7 @@ public class GroupDaoImpl implements GroupDao {
     @Override
     public void update(Group group, int groupId) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE groups SET groupName=? WHERE groupId=?")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Groups SET GroupName=? WHERE GroupId=?")) {
             preparedStatement.setString(1, group.getGroupName());
             preparedStatement.setInt(2, groupId);
             preparedStatement.execute();
@@ -81,7 +81,7 @@ public class GroupDaoImpl implements GroupDao {
     @Override
     public void delete(int groupId) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM groups WHERE groupId=?")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Groups WHERE GroupId=?")) {
             preparedStatement.setInt(1, groupId);
             preparedStatement.execute();
         } catch (SQLException | IOException e) {
@@ -92,17 +92,17 @@ public class GroupDaoImpl implements GroupDao {
     public List<Group> findGroupsByNumberOfStudents(int numberStudent) {
         List<Group> groupList = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT groups.groupId , groups.groupName ,COUNT(students.groupId)\n" +
-                     "FROM groups groups\n" +
-                     "LEFT JOIN students students ON groups.groupId = students.groupId\n" +
-                     "GROUP BY groups.groupId , groups.groupName\n" +
-                     "HAVING COUNT(students.groupId)<=?")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT Groups.GroupId , Groups.GroupName ,COUNT(Students.GroupId)\n" +
+                     "FROM Groups Groups\n" +
+                     "LEFT JOIN Students Students ON Groups.GroupId = Students.GroupId\n" +
+                     "GROUP BY Groups.GroupId , Groups.GroupName\n" +
+                     "HAVING COUNT(Students.GroupId)<=?")) {
             preparedStatement.setInt(1, numberStudent);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Group group = new Group();
-                group.setGroupId(resultSet.getInt("groupId"));
-                group.setGroupName(resultSet.getString("groupName"));
+                group.setGroupId(resultSet.getInt("GroupId"));
+                group.setGroupName(resultSet.getString("GroupName"));
                 groupList.add(group);
             }
             return groupList;

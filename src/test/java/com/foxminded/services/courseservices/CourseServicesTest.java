@@ -55,8 +55,8 @@ class CourseServicesTest {
     private void delTable() throws SQLException, IOException {
         Statement statement = dataSource.getConnection().createStatement();
         statement.execute("DROP TABLE courses;");
-        statement.execute("DROP TABLE students;");
-        statement.execute("DROP TABLE groups;");
+        statement.execute("DROP TABLE Students;");
+        statement.execute("DROP TABLE Groups;");
     }
 
     @Test

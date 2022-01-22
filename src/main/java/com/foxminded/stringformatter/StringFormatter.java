@@ -1,5 +1,6 @@
 package com.foxminded.stringformatter;
 
+import com.foxminded.course.Course;
 import com.foxminded.services.courseservices.CourseServices;
 import com.foxminded.services.groupservices.GroupServices;
 import com.foxminded.services.studentservices.StudentServices;
@@ -21,7 +22,9 @@ public class StringFormatter {
     }
 
     public String formatterStudentsByCourse(String namedCourse) {
-        List<Student> studentList = studentServices.findStudentsByCourse(namedCourse);
+        Course course = new Course();
+        course.setCourseName(namedCourse);
+        List<Student> studentList = studentServices.findStudentsByCourse(course);
         int maxLastName = calculateMaxLastNameStudent(studentList);
         int maxFirstName = calculateMaxFirstNameStudent(studentList);
         int maxId = calculateMaxIdStudent(studentList);

@@ -26,7 +26,7 @@ public class CourseServices {
     public void fillingStudentsCourses() {
         List<Student> studentList = studentDao.findAll();
         List<Course> courseList = courseDao.findAll();
-        studentList.forEach(p -> studentDao.createTableCourses(checkStudent(p).getStudentId(), courseList.get((int) (Math.random() * 19)).getCourseId()));
+        studentList.forEach(p -> studentDao.createTableCourses(checkStudent(p), courseList.get((int) (Math.random() * 19))));
     }
 
     private Student checkStudent(Student student) {

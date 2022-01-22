@@ -1,5 +1,5 @@
-CREATE TABLE studentsCourses(
-StudentId INT REFERENCES students(StudentId),
-CourseId INT REFERENCES courses(CourseId),
+CREATE TABLE StudentsCourses(
+StudentId INT REFERENCES Students(StudentId),
+CourseId INT REFERENCES Courses(CourseId),
 CONSTRAINT StudentsCoursesId PRIMARY KEY (StudentId,CourseId)
 );

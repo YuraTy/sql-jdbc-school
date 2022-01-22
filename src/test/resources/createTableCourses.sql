@@ -1,4 +1,4 @@
-CREATE TABLE  courses (
+CREATE TABLE  Courses (
 CourseId SERIAL PRIMARY KEY,
 CourseName text,
 CourseDescription text);

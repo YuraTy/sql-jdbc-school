@@ -44,10 +44,10 @@ class StudentServicesTest {
     @AfterEach
     private void delTable() throws SQLException, IOException {
         Statement statement = dataSource.getConnection().createStatement();
-        statement.execute("DROP TABLE studentsCourses;");
-        statement.execute("DROP TABLE students;");
-        statement.execute("DROP TABLE groups;");
-        statement.execute("DROP TABLE courses;");
+        statement.execute("DROP TABLE StudentsCourses;");
+        statement.execute("DROP TABLE Students;");
+        statement.execute("DROP TABLE Groups;");
+        statement.execute("DROP TABLE Courses;");
     }
 
     @Test
@@ -72,20 +72,20 @@ class StudentServicesTest {
 
     @Test
     void addStudentOnCourse() {
-        studentServices.addStudentForCourse(testStudent1().getStudentId(), testCourse1().getCourseId());
+        studentServices.addStudentForCourse(testStudent1(), testCourse1());
         Mockito.verify(studentDao).createTableCourses(Mockito.any(), Mockito.any());
     }
 
     @Test
     void deleteCourseForStudent() {
-        studentServices.deleteCourseForStudent(testStudent1().getStudentId(), testCourse1().getCourseId());
+        studentServices.deleteCourseForStudent(testStudent1(), testCourse1());
         Mockito.verify(studentDao).deleteStudentFromCourse(Mockito.any(), Mockito.any());
     }
 
     @Test
     void findStudentsByCourse() {
-        studentServices.findStudentsByCourse("mathematics");
-        Mockito.verify(studentDao).findStudentsByCourse(Mockito.anyString());
+        studentServices.findStudentsByCourse(new Course(1,"mathematics"));
+        Mockito.verify(studentDao).findStudentsByCourse(Mockito.any());
     }
 
     private Student testStudent1() {

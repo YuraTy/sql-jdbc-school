@@ -48,16 +48,16 @@ public class StudentServices {
         studentDao.delete(idStudent);
     }
 
-    public void addStudentForCourse(int studentId, int courseId) {
-        studentDao.createTableCourses(studentId, courseId);
+    public void addStudentForCourse(Student student , Course course) {
+        studentDao.createTableCourses(student, course);
     }
 
-    public void deleteCourseForStudent(int studentId, int courseId) {
-        studentDao.deleteStudentFromCourse(studentId, courseId);
+    public void deleteCourseForStudent(Student student , Course course) {
+        studentDao.deleteStudentFromCourse(student, course);
     }
 
-    public List<Student> findStudentsByCourse(String namedCourse) {
-        return studentDao.findStudentsByCourse(namedCourse);
+    public List<Student> findStudentsByCourse(Course course) {
+        return studentDao.findStudentsByCourse(course);
     }
 
     public List<Student> getAllStudent() {
