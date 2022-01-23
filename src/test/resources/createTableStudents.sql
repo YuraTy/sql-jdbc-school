@@ -1,7 +1,7 @@
-CREATE TABLE Students(
-StudentId SERIAL PRIMARY KEY,
-GroupId int,
-firstName text,
-lastName text);
+CREATE TABLE students(
+student_id SERIAL PRIMARY KEY,
+group_id int,
+first_name text,
+last_name text);
 
 

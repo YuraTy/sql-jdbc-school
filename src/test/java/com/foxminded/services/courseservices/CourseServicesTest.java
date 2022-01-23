@@ -56,7 +56,7 @@ class CourseServicesTest {
         Statement statement = dataSource.getConnection().createStatement();
         statement.execute("DROP TABLE courses;");
         statement.execute("DROP TABLE Students;");
-        statement.execute("DROP TABLE Groups;");
+        statement.execute("DROP TABLE groups;");
     }
 
     @Test
@@ -73,7 +73,7 @@ class CourseServicesTest {
         studentServices.fillingStudentsDB();
         courseServices.fillingCoursesDB();
         courseServices.fillingStudentsCourses();
-        Mockito.verify(studentDao, Mockito.times(200)).createTableCourses(Mockito.any(), Mockito.any());
+        Mockito.verify(studentDao, Mockito.times(200)).addStudentToCourse(Mockito.any(), Mockito.any());
     }
 
     private List<Course> testRandomListCourse() {

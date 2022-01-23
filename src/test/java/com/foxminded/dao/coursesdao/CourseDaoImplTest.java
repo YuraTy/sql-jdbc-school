@@ -29,7 +29,7 @@ class CourseDaoImplTest {
     @AfterEach
     private void delTable() throws SQLException, IOException {
         Statement statement = dataSource.getConnection().createStatement();
-        statement.execute("DROP TABLE Courses;");
+        statement.execute("DROP TABLE courses;");
     }
 
     @Test

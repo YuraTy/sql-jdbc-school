@@ -7,6 +7,8 @@ import com.foxminded.groups.Group;
 import com.foxminded.randomdata.RandomData;
 import com.foxminded.student.Student;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +51,7 @@ public class StudentServices {
     }
 
     public void addStudentForCourse(Student student , Course course) {
-        studentDao.createTableCourses(student, course);
+        studentDao.addStudentToCourse(student, course);
     }
 
     public void deleteCourseForStudent(Student student , Course course) {
@@ -62,5 +64,21 @@ public class StudentServices {
 
     public List<Student> getAllStudent() {
         return studentDao.findAll();
+    }
+
+    public void createTableStudents() throws SQLException, IOException {
+        studentDao.createTableStudents();
+    }
+
+    public void deleteTableStudents() throws SQLException, IOException {
+        studentDao.deleteTableStudents();
+    }
+
+    public void createTableCourseStudent() throws SQLException, IOException {
+        studentDao.createTableCourseStudent();
+    }
+
+    public void deleteTableCourseStudent() throws SQLException, IOException {
+        studentDao.deleteTableCourseStudent();
     }
 }

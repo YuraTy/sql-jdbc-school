@@ -6,11 +6,13 @@ import com.foxminded.dao.studentdao.StudentDaoImpl;
 import com.foxminded.randomdata.RandomData;
 import com.foxminded.student.Student;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.*;
 
 public class CourseServices {
 
-    private  CourseDaoImpl courseDao;
+    private  CourseDaoImpl courseDao = new CourseDaoImpl();
     private final RandomData randomData = new RandomData();
     private  StudentDaoImpl studentDao ;
     private static final Map<Student, Integer> courseSize = new HashMap<>();
@@ -26,7 +28,7 @@ public class CourseServices {
     public void fillingStudentsCourses() {
         List<Student> studentList = studentDao.findAll();
         List<Course> courseList = courseDao.findAll();
-        studentList.forEach(p -> studentDao.createTableCourses(checkStudent(p), courseList.get((int) (Math.random() * 19))));
+        studentList.forEach(p -> studentDao.addStudentToCourse(checkStudent(p), courseList.get((int) (Math.random() * 19))));
     }
 
     private Student checkStudent(Student student) {
@@ -42,5 +44,13 @@ public class CourseServices {
 
     public List<Course> getAllCourse() {
         return courseDao.findAll();
+    }
+
+    public void createTableCourses() throws SQLException, IOException {
+        courseDao.createTableCourses();
+    }
+
+    public void deleteTableCourses() throws SQLException, IOException {
+        courseDao.deleteTableCourses();
     }
 }

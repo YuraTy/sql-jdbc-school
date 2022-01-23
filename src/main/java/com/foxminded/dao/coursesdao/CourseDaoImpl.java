@@ -2,12 +2,11 @@ package com.foxminded.dao.coursesdao;
 
 import com.foxminded.course.Course;
 import com.foxminded.datasource.DataSource;
+import org.h2.tools.RunScript;
 
+import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public void create(Course course) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Courses SET CourseName=? , CourseDescription=?")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO courses SET course_name=? , course_description=?")) {
             preparedStatement.setString(1, course.getCourseName());
             preparedStatement.setString(2, course.getCourseDescription());
             preparedStatement.execute();
@@ -31,13 +30,13 @@ public class CourseDaoImpl implements CourseDao {
     public List<Course> findAll() {
         List<Course> allCourse = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT CourseId , CourseName , CourseDescription FROM Courses");
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT course_id , course_name , course_description FROM courses");
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
                 Course course = new Course();
-                course.setCourseId(resultSet.getInt("CourseId"));
-                course.setCourseName(resultSet.getString("CourseName"));
-                course.setCourseDescription(resultSet.getString("CourseDescription"));
+                course.setCourseId(resultSet.getInt("course_id"));
+                course.setCourseName(resultSet.getString("course_name"));
+                course.setCourseDescription(resultSet.getString("course_description"));
                 allCourse.add(course);
             }
             return allCourse;
@@ -52,13 +51,13 @@ public class CourseDaoImpl implements CourseDao {
     public Course findId(int courseId) {
         Course course = new Course();
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT CourseId , CourseName , CourseDescription FROM Courses WHERE CourseId=?")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT course_id , course_name , course_description FROM courses WHERE course_id=?")) {
             preparedStatement.setInt(1, courseId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()) {
-                course.setCourseId(resultSet.getInt("CourseId"));
-                course.setCourseName(resultSet.getString("CourseName"));
-                course.setCourseDescription(resultSet.getString("CourseDescription"));
+                course.setCourseId(resultSet.getInt("course_id"));
+                course.setCourseName(resultSet.getString("course_name"));
+                course.setCourseDescription(resultSet.getString("course_description"));
             }
             return course;
         } catch (SQLException | IOException e) {
@@ -71,7 +70,7 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public void update(Course course, int courseId) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Courses SET CourseName=? , CourseDescription=? WHERE CourseId=?")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE courses SET course_name=? , course_description=? WHERE course_id=?")) {
             preparedStatement.setString(1, course.getCourseName());
             preparedStatement.setString(2, course.getCourseDescription());
             preparedStatement.setInt(3, courseId);
@@ -85,11 +84,20 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public void delete(int courseId) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Courses WHERE CourseId=?")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM courses WHERE course_id=?")) {
             preparedStatement.setInt(1, courseId);
             preparedStatement.execute();
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void createTableCourses() throws SQLException, IOException {
+        RunScript.execute(dataSource.getConnection(), new FileReader("src/main/resources/createTableCourses.sql"));
+    }
+
+    public void deleteTableCourses() throws SQLException, IOException {
+        Statement statement = dataSource.getConnection().createStatement();
+        statement.execute("DROP TABLE courses;");
     }
 }

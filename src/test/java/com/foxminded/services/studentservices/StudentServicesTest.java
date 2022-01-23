@@ -44,10 +44,10 @@ class StudentServicesTest {
     @AfterEach
     private void delTable() throws SQLException, IOException {
         Statement statement = dataSource.getConnection().createStatement();
-        statement.execute("DROP TABLE StudentsCourses;");
-        statement.execute("DROP TABLE Students;");
-        statement.execute("DROP TABLE Groups;");
-        statement.execute("DROP TABLE Courses;");
+        statement.execute("DROP TABLE students_courses;");
+        statement.execute("DROP TABLE students;");
+        statement.execute("DROP TABLE groups;");
+        statement.execute("DROP TABLE courses;");
     }
 
     @Test
@@ -73,7 +73,7 @@ class StudentServicesTest {
     @Test
     void addStudentOnCourse() {
         studentServices.addStudentForCourse(testStudent1(), testCourse1());
-        Mockito.verify(studentDao).createTableCourses(Mockito.any(), Mockito.any());
+        Mockito.verify(studentDao).addStudentToCourse(Mockito.any(), Mockito.any());
     }
 
     @Test

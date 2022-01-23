@@ -1,4 +1,4 @@
 CREATE TABLE groups (
-GroupId SERIAL PRIMARY KEY,
-GroupName text);
+group_id SERIAL PRIMARY KEY,
+group_name text);
 

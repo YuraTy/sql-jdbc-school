@@ -1,7 +1,7 @@
 CREATE TABLE students(
-StudentId int NOT NULL AUTO_INCREMENT,
-GroupId int,
-FirstName text,
-LastName text,
-PRIMARY KEY (StudentId));
+student_id SERIAL PRIMARY KEY,
+group_id int,
+first_name text,
+last_name text);
+
 

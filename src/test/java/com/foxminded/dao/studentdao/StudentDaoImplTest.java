@@ -31,9 +31,9 @@ class StudentDaoImplTest {
     @AfterEach
     private void delTable() throws SQLException, IOException {
         Statement statement = dataSource.getConnection().createStatement();
-        statement.execute("DROP TABLE StudentsCourses;");
-        statement.execute("DROP TABLE Students;");
-        statement.execute("DROP TABLE Courses;");
+        statement.execute("DROP TABLE students_courses;");
+        statement.execute("DROP TABLE students;");
+        statement.execute("DROP TABLE courses;");
     }
 
     @Test
@@ -86,9 +86,9 @@ class StudentDaoImplTest {
     void findStudentsByCourse() {
         Stream.of(testStudent1(),testStudent2()).forEach(studentDao::create);
         Stream.of(testCourse1(),testCourse2()).forEach(courseDao::create);
-        studentDao.createTableCourses(testStudent1(), testCourse1());
-        studentDao.createTableCourses(testStudent1(), testCourse2());
-        studentDao.createTableCourses(testStudent2(), testCourse2());
+        studentDao.addStudentToCourse(testStudent1(), testCourse1());
+        studentDao.addStudentToCourse(testStudent1(), testCourse2());
+        studentDao.addStudentToCourse(testStudent2(), testCourse2());
         List<Student> expectedList = new ArrayList<>();
         expectedList.add(testStudent1());
         expectedList.add(testStudent2());

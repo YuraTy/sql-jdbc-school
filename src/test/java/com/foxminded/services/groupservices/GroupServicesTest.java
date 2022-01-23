@@ -39,7 +39,7 @@ class GroupServicesTest {
     @AfterEach
     private void delTable() throws SQLException, IOException {
         Statement statement = dataSource.getConnection().createStatement();
-        statement.execute("DROP TABLE Groups;");
+        statement.execute("DROP TABLE groups;");
     }
 
     @Test

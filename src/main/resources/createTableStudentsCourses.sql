@@ -1,6 +1,5 @@
-CREATE TABLE StudentsCourses(
-StudentId int NOT NULL,
-CourseId int NOT NULL,
-FOREIGN KEY (StudentId) REFERENCES Students(StudentId),
-FOREIGN KEY (CourseId) REFERENCES Courses(CourseId)
-UNIQUE (Students,Courses));
+CREATE TABLE students_courses(
+student_id INT REFERENCES students(student_id),
+course_id INT REFERENCES courses(course_id),
+CONSTRAINT students_coursesId PRIMARY KEY (student_id,course_id)
+);

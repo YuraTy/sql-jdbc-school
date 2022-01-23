@@ -3,12 +3,11 @@ package com.foxminded.dao.studentdao;
 import com.foxminded.course.Course;
 import com.foxminded.datasource.DataSource;
 import com.foxminded.student.Student;
+import org.h2.tools.RunScript;
 
+import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public void create(Student student) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Students SET FirstName=? , LastName=? , GroupId=? ")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO students SET first_name=? , last_name=? , group_id=? ")) {
             preparedStatement.setString(1, student.getFirstName());
             preparedStatement.setString(2, student.getLastName());
             preparedStatement.setInt(3, student.getGroupId());
@@ -34,14 +33,14 @@ public class StudentDaoImpl implements StudentDao {
     public List<Student> findAll() {
         List<Student> studentsList = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT StudentId , GroupId , FirstName , LastName FROM Students");
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT student_id , group_id , first_name , last_name FROM students");
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
                 Student student = new Student();
-                student.setStudentId(resultSet.getInt("StudentId"));
-                student.setGroupId(resultSet.getInt("GroupId"));
-                student.setFirstName(resultSet.getString("FirstName"));
-                student.setLastName(resultSet.getString("LastName"));
+                student.setStudentId(resultSet.getInt("student_id"));
+                student.setGroupId(resultSet.getInt("group_id"));
+                student.setFirstName(resultSet.getString("first_name"));
+                student.setLastName(resultSet.getString("last_name"));
                 studentsList.add(student);
             }
             return studentsList;
@@ -56,14 +55,14 @@ public class StudentDaoImpl implements StudentDao {
     public Student findId(int studentId) {
         Student student = new Student();
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT StudentId , GroupId , FirstName , LastName FROM Students WHERE StudentId=?")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT student_id , group_id , first_name , last_name FROM students WHERE student_id=?")) {
             preparedStatement.setInt(1, studentId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                student.setStudentId(resultSet.getInt("StudentId"));
-                student.setGroupId(resultSet.getInt("GroupId"));
-                student.setFirstName(resultSet.getString("FirstName"));
-                student.setLastName(resultSet.getString("LastName"));
+                student.setStudentId(resultSet.getInt("student_id"));
+                student.setGroupId(resultSet.getInt("group_id"));
+                student.setFirstName(resultSet.getString("first_name"));
+                student.setLastName(resultSet.getString("last_name"));
             }
             return student;
         } catch (SQLException | IOException e) {
@@ -76,7 +75,7 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public void update(Student student, int studentId) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement updateById = connection.prepareStatement("UPDATE Students SET GroupId = ? , FirstName = ? , LastName = ? WHERE StudentId = ?")) {
+             PreparedStatement updateById = connection.prepareStatement("UPDATE students SET group_id = ? , first_name = ? , last_name = ? WHERE student_id = ?")) {
             updateById.setInt(1, student.getGroupId());
             updateById.setString(2, student.getFirstName());
             updateById.setString(3, student.getLastName());
@@ -90,7 +89,7 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public void delete(int studentId) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Students WHERE StudentId = ? ")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM students WHERE student_id = ? ")) {
             preparedStatement.setInt(1, studentId);
             preparedStatement.execute();
         } catch (SQLException | IOException e) {
@@ -98,9 +97,9 @@ public class StudentDaoImpl implements StudentDao {
         }
     }
 
-    public void createTableCourses(Student student, Course course) {
+    public void addStudentToCourse(Student student, Course course) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO StudentsCourses VALUES(?,?)")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO students_courses VALUES(?,?)")) {
             preparedStatement.setInt(1, student.getStudentId());
             preparedStatement.setInt(2, course.getCourseId());
             preparedStatement.execute();
@@ -111,7 +110,7 @@ public class StudentDaoImpl implements StudentDao {
 
     public void deleteStudentFromCourse(Student student, Course course) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM StudentsCourses WHERE (StudentId = ?, CourseId = ?)")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM students_courses WHERE (student_id = ?, course_id = ?)")) {
             preparedStatement.setInt(1, student.getStudentId());
             preparedStatement.setInt(2, course.getCourseId());
             preparedStatement.execute();
@@ -123,19 +122,19 @@ public class StudentDaoImpl implements StudentDao {
     public List<Student> findStudentsByCourse(Course course) {
         List<Student> studentsList = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT Students.StudentId,Students.FirstName,students.LastName,students.GroupId\n" +
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT students.student_id,students.first_name,students.last_name,students.group_id\n" +
                      "FROM students students\n" +
-                     "INNER JOIN StudentsCourses StudentsCourses ON students.StudentId = StudentsCourses.StudentId\n" +
-                     "INNER JOIN Courses Courses ON Courses.CourseId = StudentsCourses.CourseId\n" +
-                     "WHERE Courses.CourseName LIKE ?")) {
+                     "INNER JOIN students_courses students_courses ON students.student_id = students_courses.student_id\n" +
+                     "INNER JOIN courses courses ON courses.course_id = students_courses.course_id\n" +
+                     "WHERE courses.course_name LIKE ?")) {
             preparedStatement.setString(1, course.getCourseName());
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Student student = new Student();
-                student.setStudentId(resultSet.getInt("StudentId"));
-                student.setGroupId(resultSet.getInt("GroupId"));
-                student.setFirstName(resultSet.getString("FirstName"));
-                student.setLastName(resultSet.getString("LastName"));
+                student.setStudentId(resultSet.getInt("student_id"));
+                student.setGroupId(resultSet.getInt("group_id"));
+                student.setFirstName(resultSet.getString("first_name"));
+                student.setLastName(resultSet.getString("last_name"));
                 studentsList.add(student);
             }
             return studentsList;
@@ -144,5 +143,23 @@ public class StudentDaoImpl implements StudentDao {
             e.printStackTrace();
         }
         return studentsList;
+    }
+
+    public void createTableStudents() throws SQLException, IOException {
+        RunScript.execute(dataSource.getConnection(), new FileReader("src/main/resources/createTableStudents.sql"));
+    }
+
+    public void deleteTableStudents() throws SQLException, IOException {
+        Statement statement = dataSource.getConnection().createStatement();
+        statement.execute("DROP TABLE students;");
+    }
+
+    public void createTableCourseStudent() throws SQLException, IOException {
+        RunScript.execute(dataSource.getConnection(), new FileReader("src/main/resources/createTableStudentsCourses.sql"));
+    }
+
+    public void deleteTableCourseStudent() throws SQLException, IOException {
+        Statement statement = dataSource.getConnection().createStatement();
+        statement.execute("DROP TABLE students_courses;");
     }
 }

@@ -1,5 +1,5 @@
-CREATE TABLE  courses( 
-CourseId int,
-CourseName text,
-CourseDescription text,
-PRIMARY KEY (CourseId));
+CREATE TABLE  courses (
+course_id SERIAL PRIMARY KEY,
+course_name text,
+course_description text);
+
