@@ -1,6 +1,7 @@
 package com.foxminded.dao.groupsdao;
 
 import com.foxminded.datasource.DataSource;
+import com.foxminded.executescript.ExecuteScript;
 import com.foxminded.groups.Group;
 import org.h2.tools.RunScript;
 
@@ -17,7 +18,7 @@ public class GroupDaoImpl implements GroupDao {
     @Override
     public void create(Group group) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO groups SET group_name=?")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO groups(group_name) VALUES (?)")) {
             preparedStatement.setString(1, group.getGroupName());
             preparedStatement.execute();
         } catch (SQLException | IOException e) {
@@ -113,7 +114,7 @@ public class GroupDaoImpl implements GroupDao {
     }
 
     public void createTableGroup() throws SQLException, IOException {
-        RunScript.execute(dataSource.getConnection(), new FileReader("src/main/resources/createTableGroups.sql"));
+        new ExecuteScript().runeScript("createTableGroups.sql",dataSource.getConnection());
     }
 
     public void deleteTableGroup() throws SQLException, IOException {

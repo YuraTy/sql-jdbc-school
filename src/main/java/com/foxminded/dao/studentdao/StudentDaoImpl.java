@@ -2,6 +2,7 @@ package com.foxminded.dao.studentdao;
 
 import com.foxminded.course.Course;
 import com.foxminded.datasource.DataSource;
+import com.foxminded.executescript.ExecuteScript;
 import com.foxminded.student.Student;
 import org.h2.tools.RunScript;
 
@@ -18,7 +19,7 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public void create(Student student) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO students SET first_name=? , last_name=? , group_id=? ")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO students(first_name , last_name , group_id) VALUES (?,?,?)")) {
             preparedStatement.setString(1, student.getFirstName());
             preparedStatement.setString(2, student.getLastName());
             preparedStatement.setInt(3, student.getGroupId());
@@ -146,7 +147,7 @@ public class StudentDaoImpl implements StudentDao {
     }
 
     public void createTableStudents() throws SQLException, IOException {
-        RunScript.execute(dataSource.getConnection(), new FileReader("src/main/resources/createTableStudents.sql"));
+        new ExecuteScript().runeScript("createTableStudents.sql",dataSource.getConnection());
     }
 
     public void deleteTableStudents() throws SQLException, IOException {
@@ -155,7 +156,7 @@ public class StudentDaoImpl implements StudentDao {
     }
 
     public void createTableCourseStudent() throws SQLException, IOException {
-        RunScript.execute(dataSource.getConnection(), new FileReader("src/main/resources/createTableStudentsCourses.sql"));
+        new ExecuteScript().runeScript("createTableStudentsCourses.sql",dataSource.getConnection());
     }
 
     public void deleteTableCourseStudent() throws SQLException, IOException {

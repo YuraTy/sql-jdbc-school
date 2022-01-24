@@ -73,6 +73,12 @@
             <version>2.23.4</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.ibatis</groupId>
+            <artifactId>ibatis-core</artifactId>
+            <version>3.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -100,8 +106,4 @@
             </plugin>
         </plugins>
     </build>
-
-
-
-
 </project>

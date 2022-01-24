@@ -2,6 +2,7 @@ package com.foxminded.dao.coursesdao;
 
 import com.foxminded.course.Course;
 import com.foxminded.datasource.DataSource;
+import com.foxminded.executescript.ExecuteScript;
 import org.h2.tools.RunScript;
 
 import java.io.FileReader;
@@ -17,7 +18,7 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public void create(Course course) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO courses SET course_name=? , course_description=?")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO courses (course_name , course_description) VALUES (?,?)")) {
             preparedStatement.setString(1, course.getCourseName());
             preparedStatement.setString(2, course.getCourseDescription());
             preparedStatement.execute();
@@ -93,7 +94,7 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     public void createTableCourses() throws SQLException, IOException {
-        RunScript.execute(dataSource.getConnection(), new FileReader("src/main/resources/createTableCourses.sql"));
+        new ExecuteScript().runeScript("createTableCourses.sql",dataSource.getConnection());
     }
 
     public void deleteTableCourses() throws SQLException, IOException {

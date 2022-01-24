@@ -14,7 +14,7 @@ public class CourseServices {
 
     private  CourseDaoImpl courseDao = new CourseDaoImpl();
     private final RandomData randomData = new RandomData();
-    private  StudentDaoImpl studentDao ;
+    private  StudentDaoImpl studentDao = new StudentDaoImpl() ;
     private static final Map<Student, Integer> courseSize = new HashMap<>();
     private final int randomNumber = COURSE_FOR_STUDENTS_MIN + (int) (Math.random() * COURSE_FOR_STUDENTS_MAX) ;
 

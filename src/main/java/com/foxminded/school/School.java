@@ -22,6 +22,11 @@ public class School {
         courseServices.createTableCourses();
         studentServices.createTableCourseStudent();
 
+        groupServices.fillingGroupsDB();
+        studentServices.fillingStudentsDB();
+        courseServices.fillingCoursesDB();
+        courseServices.fillingStudentsCourses();
+
         System.out.println("1-Find all groups with fewer or fewer students\n" +
                 "2-Find all students who are relevant to the course with the given names\n" +
                 "3-Add a new student\n" +
@@ -57,9 +62,9 @@ public class School {
                 System.out.println("Enter the student's last name:");
                 input = scanner.next();
                 student.setLastName(input);
-//                System.out.println("Enter student group Id:");
-//                input = scanner.next();
-//                student.setGroupId(Integer.parseInt(input));
+                System.out.println("Enter student group Id:");
+                input = scanner.next();
+                student.setGroupId(Integer.parseInt(input));
                 studentServices.newStudent(student);
                 break;
             case 4:
