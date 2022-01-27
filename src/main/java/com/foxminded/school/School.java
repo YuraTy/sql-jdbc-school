@@ -81,8 +81,9 @@ public class School {
                 studentServices.deleteCourseForStudent(new Student(idStudent),new Course(Integer.parseInt(input)));
                 break;
             case 6:
-                stringFormatter.allListStudent();
-                stringFormatter.allListCourse();
+                System.out.println(stringFormatter.allListStudent());
+                System.out.println(stringFormatter.allListCourse());
+
                 System.out.println("Enter Student ID:");
                 input = scanner.next();
                 int idStudentAdd = Integer.parseInt(input);
@@ -97,5 +98,9 @@ public class School {
                 groupServices.deleteTableGroup();
                 courseServices.deleteTableCourses();
         }
+        studentServices.deleteTableCourseStudent();
+        studentServices.deleteTableStudents();
+        groupServices.deleteTableGroup();
+        courseServices.deleteTableCourses();
     }
 }

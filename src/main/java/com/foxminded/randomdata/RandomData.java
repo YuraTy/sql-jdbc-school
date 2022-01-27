@@ -44,7 +44,8 @@ public class RandomData {
     }
 
     public int randomNumber(int start, int finale) {
-        return start + (int) (Math.random() * finale);
+        Random random = new Random();
+        return start + random.nextInt(finale - start);
     }
 
 }

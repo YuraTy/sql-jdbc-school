@@ -94,7 +94,7 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     public void createTableCourses() throws SQLException, IOException {
-        new ExecuteScript().runeScript("createTableCourses.sql",dataSource.getConnection());
+        new ExecuteScript().runScript("createTableCourses.sql",dataSource.getConnection());
     }
 
     public void deleteTableCourses() throws SQLException, IOException {

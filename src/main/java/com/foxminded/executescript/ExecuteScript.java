@@ -2,21 +2,23 @@ package com.foxminded.executescript;
 
 import java.io.*;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Objects;
-
-import org.apache.ibatis.jdbc.ScriptRunner;
+import java.util.stream.Collectors;
 
 public class ExecuteScript {
 
-    public void runeScript(String patchScriptSQL, Connection dataSource) throws SQLException, IOException {
-        try (dataSource) {
-            ScriptRunner scriptRunner = new ScriptRunner(dataSource);
-            try (FileReader file = new FileReader(Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResource(patchScriptSQL)).getFile())) {
-                scriptRunner.runScript(file);
-            } catch (FileNotFoundException fileNotFoundException) {
-                fileNotFoundException.printStackTrace();
-            }
+    public void runScript(String patchScriptSQL, Connection dataSource) throws SQLException{
+
+        InputStream propertiesStream = ClassLoader.getSystemClassLoader().getResourceAsStream(patchScriptSQL);
+        assert propertiesStream != null;
+        String sqlScript = new BufferedReader(new InputStreamReader(propertiesStream)).lines()
+                .collect(Collectors.joining("\n"));
+
+        try (PreparedStatement preparedStatement = dataSource.prepareStatement(sqlScript)) {
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

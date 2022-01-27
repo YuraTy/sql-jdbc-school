@@ -114,7 +114,7 @@ public class GroupDaoImpl implements GroupDao {
     }
 
     public void createTableGroup() throws SQLException, IOException {
-        new ExecuteScript().runeScript("createTableGroups.sql",dataSource.getConnection());
+        new ExecuteScript().runScript("createTableGroups.sql",dataSource.getConnection());
     }
 
     public void deleteTableGroup() throws SQLException, IOException {

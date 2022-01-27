@@ -55,7 +55,7 @@ public class StringFormatter {
     }
 
     private String formatterStudent(Student student , int maxId , int maxFirstName , int maxLastName) {
-        return String.format("%-" + maxId + "d.%-" + maxFirstName + "s%-" + maxLastName + "%s %s",student.getStudentId(),student.getFirstName(),student.getLastName(),student.getGroupId());
+        return String.format("%-" + maxId + "d.%-" + maxFirstName + "s %-" + maxLastName + "s %d",student.getStudentId(),student.getFirstName(),student.getLastName(),student.getGroupId());
     }
 
     public String allListCourse() {

@@ -24,7 +24,6 @@ public class StudentDaoImpl implements StudentDao {
             preparedStatement.setString(2, student.getLastName());
             preparedStatement.setInt(3, student.getGroupId());
             preparedStatement.execute();
-            System.out.println("Data recorded");
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
@@ -147,7 +146,7 @@ public class StudentDaoImpl implements StudentDao {
     }
 
     public void createTableStudents() throws SQLException, IOException {
-        new ExecuteScript().runeScript("createTableStudents.sql",dataSource.getConnection());
+        new ExecuteScript().runScript("createTableStudents.sql",dataSource.getConnection());
     }
 
     public void deleteTableStudents() throws SQLException, IOException {
@@ -156,7 +155,7 @@ public class StudentDaoImpl implements StudentDao {
     }
 
     public void createTableCourseStudent() throws SQLException, IOException {
-        new ExecuteScript().runeScript("createTableStudentsCourses.sql",dataSource.getConnection());
+        new ExecuteScript().runScript("createTableStudentsCourses.sql",dataSource.getConnection());
     }
 
     public void deleteTableCourseStudent() throws SQLException, IOException {
